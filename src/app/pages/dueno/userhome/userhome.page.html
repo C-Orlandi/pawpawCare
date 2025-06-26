@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>PawCare</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/perfil-menu">
+        <ion-icon name="person"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card class="card-spacing welcome-card">
+    <ion-card-header>
+      <ion-card-title>¡Hola, {{ usuarioLogin }}! 🐾</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Bienvenido/a a <strong>PawCare</strong>, tu plataforma de gestión de salud animal.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card button class="app-card" routerLink="/mis-mascotas">
+    <div class="card-image-wrapper">
+      <img alt="Mis Mascotas" src="../../../../assets/img/bannerblanco.jpg" />
+      <div class="card-overlay">
+        <ion-card-title>Mis Mascotas</ion-card-title>
+      </div>
+    </div>
+    <ion-card-content>
+      <ion-button expand="full" color="dark" fill="solid" size="large">
+        <ion-icon slot="start" name="paw-outline"></ion-icon>
+        Ver Mis Mascotas
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card button class="app-card" routerLink="/geolocalizacion">
+    <div class="card-image-wrapper">
+      <img alt="Geolocalización" src="../../../../assets/img/vettt.webp" />
+      <div class="card-overlay">
+        <ion-card-title>Geolocalización</ion-card-title>
+      </div>
+    </div>
+    <ion-card-content>
+      <ion-button expand="full" color="dark" fill="solid" size="large">
+        <ion-icon slot="start" name="navigate-outline"></ion-icon>
+        Abrir Mapa
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

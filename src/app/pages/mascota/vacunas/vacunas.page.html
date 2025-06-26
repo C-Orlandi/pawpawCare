@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Vacunas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="exportarPDF()">
+        <ion-icon name="download-outline" slot="start"></ion-icon>
+        Exportar PDF
+      </ion-button>
+      <ion-button (click)="abrirModalVacuna()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-list *ngIf="vacunas$ | async as vacunas; else cargando">
+    <ion-item
+      *ngFor="let vacuna of vacunas"
+      lines="inset"
+      button
+      (click)="abrirModalVacuna(vacuna)"
+      class="vacuna-item"
+    >
+      <ion-label>
+        <h2 class="titulo">{{ vacuna.nombre }}</h2>
+        <p>📅 {{ formatearFechaHora(vacuna.fechayhora) }}</p>
+        <p>
+          Estado:
+          <strong [ngClass]="{ 'estado-aplicada': vacuna.estado === 'aplicada', 'estado-pendiente': vacuna.estado !== 'aplicada' }">
+            {{ vacuna.estado | titlecase }}
+          </strong>
+        </p>
+      </ion-label>
+
+      <ion-button
+        fill="clear"
+        color="danger"
+        slot="end"
+        (click)="eliminarVacuna(vacuna.vid); $event.stopPropagation()"
+      >
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item *ngIf="vacunas.length === 0">
+      <ion-label class="ion-text-center">No hay vacunas registradas.</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #cargando>
+    <div class="cargando-spinner">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p class="ion-text-center">Cargando vacunas...</p>
+    </div>
+  </ng-template>
+
+</ion-content>

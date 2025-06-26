@@ -1,0 +1,23 @@
+.spinner-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--ion-color-medium);
+  font-size: 14px;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  margin: 20px 0;
+  color: var(--ion-color-medium);
+  font-style: italic;
+}
+
+.mensaje-encontrados {
+  text-align: center;
+  margin: 10px 0 20px;
+  color: var(--ion-color-success);
+  font-weight: 500;
+}

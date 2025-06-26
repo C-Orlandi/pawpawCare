@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>{{ mascota ? 'Editar Mascota' : 'Nueva Mascota' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrar()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="mascotaForm" (ngSubmit)="guardar()">
+
+        <!-- Select de Usuario -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Dueño <ion-text color="danger">*</ion-text></ion-label>
+          <ion-select formControlName="usuarioUid" interface="popover">
+            <ion-select-option *ngFor="let usuario of usuarios$ | async" [value]="usuario.uid">
+              {{ usuario.nombre }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mascotaForm.get('usuarioUid')?.touched && mascotaForm.get('usuarioUid')?.hasError('required')">
+          <p class="ion-padding-start">Debe seleccionar un dueño.</p>
+        </ion-text>
+
+        <!-- Nombre -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Nombre <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="nombre"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mascotaForm.get('nombre')?.touched && mascotaForm.get('nombre')?.hasError('required')">
+          <p class="ion-padding-start">El nombre es obligatorio.</p>
+        </ion-text>
+
+        <!-- Tipo -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Tipo <ion-text color="danger">*</ion-text></ion-label>
+          <ion-input formControlName="tipo"></ion-input>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mascotaForm.get('tipo')?.touched && mascotaForm.get('tipo')?.hasError('required')">
+          <p class="ion-padding-start">El tipo es obligatorio.</p>
+        </ion-text>
+
+        <!-- Raza -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Raza</ion-label>
+          <ion-input formControlName="raza"></ion-input>
+        </ion-item>
+
+        <!-- Fecha de nacimiento -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Fecha Nacimiento <ion-text color="danger">*</ion-text></ion-label>
+          <ion-datetime formControlName="fechaNacimiento" presentation="date"></ion-datetime>
+        </ion-item>
+        <ion-text color="danger" *ngIf="mascotaForm.get('fechaNacimiento')?.touched && mascotaForm.get('fechaNacimiento')?.hasError('required')">
+          <p class="ion-padding-start">La fecha de nacimiento es obligatoria.</p>
+        </ion-text>
+
+        <!-- Edad -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Edad</ion-label>
+          <ion-input formControlName="edad" type="number"></ion-input>
+        </ion-item>
+
+        <!-- Peso -->
+        <ion-item lines="inset">
+          <ion-label position="floating">Peso</ion-label>
+          <ion-input formControlName="peso" type="number"></ion-input>
+        </ion-item>
+
+        <!-- Botón -->
+        <ion-button expand="block" shape="round" size="large" class="ion-margin-top" type="submit" color="dark" [disabled]="mascotaForm.invalid" style="font-size: 15px;">
+          {{ mascota ? 'Actualizar' : 'Crear' }} Mascota
+        </ion-button>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

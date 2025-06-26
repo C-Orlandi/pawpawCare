@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Control de Peso y Crecimiento</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="exportarPDF()">
+        <ion-icon name="download-outline" slot="start"></ion-icon>
+        Exportar PDF
+      </ion-button>
+      <ion-button (click)="abrirModalControl()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="controles$ | async as controles; else cargando">
+    <ion-item
+      *ngFor="let item of controles"
+      lines="inset"
+      button
+      (click)="abrirModalControl(item)"
+      class="vacuna-item"
+    >
+      <ion-label>
+        <h2 class="titulo">{{ item.peso }} kg</h2>
+        <p>📅 {{ formatearFechaHora(item.fecha) }}</p>
+        <p *ngIf="item.observaciones">{{ item.observaciones }}</p>
+      </ion-label>
+
+      <ion-button
+        fill="clear"
+        color="danger"
+        slot="end"
+        (click)="eliminarControl(item.cid); $event.stopPropagation()"
+      >
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item *ngIf="controles.length === 0">
+      <ion-label class="ion-text-center">No hay registros de control.</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #cargando>
+    <div class="cargando-spinner">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p class="ion-text-center">Cargando controles...</p>
+    </div>
+  </ng-template>
+</ion-content>

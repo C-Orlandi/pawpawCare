@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+    <ion-title>Recordatorios</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="abrirModalRecordatorio()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="recordatorios; else cargando">
+    <ion-item *ngFor="let rec of recordatorios" lines="inset" button (click)="abrirModalRecordatorio(rec)">
+      <ion-label>
+        <h2>{{ rec.nombreMascota || 'Mascota desconocida' }}</h2>
+        <p>Tipo: {{ rec.tipo }}</p>
+
+        <ng-container *ngIf="rec.tipo === 'vacuna' || rec.tipo === 'desparasitacion'">
+          <p>Nombre: {{ rec.nombre }}</p>
+          <p>Fecha: {{ formatearFechaHora(rec.horaInicio) }}</p>
+          <p [class.text-red]="rec.estado === 'pendiente'">Estado: {{ rec.estado }}</p>
+        </ng-container>
+
+        <ng-container *ngIf="rec.tipo === 'medicamento'">
+          <p>Medicamento: {{ rec.nombre }}</p>
+          <p>Fecha: {{ formatearFechaHora(rec.horaInicio) }}</p>
+          <p>Dosis: {{ rec.dosis }} x {{ rec.duracion }} días cada {{ rec.frecuenciaHoras }} horas</p>
+          <p [class.text-red]="rec.estado === 'activo'">Estado: {{ rec.estado }}</p>
+        </ng-container>
+
+      </ion-label>
+
+      <ion-button fill="clear" color="danger" slot="end" (click)="eliminarRecordatorio(rec); $event.stopPropagation()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <ion-item *ngIf="recordatorios.length === 0">
+      <ion-label class="ion-text-center">No hay recordatorios registrados.</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #cargando>
+    <ion-spinner name="crescent"></ion-spinner>
+    <p class="ion-text-center">Cargando recordatorios...</p>
+  </ng-template>
+</ion-content>
