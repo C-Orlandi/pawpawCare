@@ -5,12 +5,14 @@ import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
+import { LoadingController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportarpdfService {
-  constructor(private afs: AngularFirestore, private http: HttpClient) {}  // usar AngularFirestore de compat
+  constructor(private afs: AngularFirestore, private http: HttpClient, private loadingController: LoadingController) {}  // usar AngularFirestore de compat
 
   exportarHistorialMedico(registros: any[], nombreMascota: string, formatearFecha: (fecha: any) => string) {
     if (registros.length === 0) {
@@ -180,78 +182,112 @@ export class ExportarpdfService {
     doc.save('historial_controles.pdf');
   }
 
-  exportarAlimentacion(alimentaciones: any[], nombreMascota: string, formatearFechaHora: (fecha: any) => string) {
-    if (!alimentaciones || alimentaciones.length === 0) {
-      alert('No hay registros de alimentación para exportar.');
+  async exportarAlimentacion(
+  alimentaciones: any[],
+  nombreMascota: string,
+  formatearFechaHora: (fecha: any) => string
+) {
+  if (!alimentaciones || alimentaciones.length === 0) {
+    Swal.fire({
+      icon: 'info',
+      title: 'Sin historial',
+      text: 'No hay registros de alimentación para exportar.',
+      confirmButtonText: 'OK',
+      heightAuto: false
+    });
+    return;
+  }
+
+  const doc = new jsPDF();
+  const titulo = `Historial de Alimentación de ${nombreMascota || 'Mascota'}`;
+  this.agregarEncabezado(doc, titulo);
+
+  let y = 30;
+
+  alimentaciones.forEach(a => {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(10, 45, 105);
+    doc.text(`• ${a.tipoAlimento || 'Tipo no especificado'} - ${a.nombreAlimento || 'Nombre no especificado'}`, 10, y);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+
+    doc.text(`Cantidad: ${a.cantidad || 'N/A'}`, 15, y + 8);
+    doc.text(`Método: ${a.metodo || 'N/A'}`, 15, y + 15);
+    doc.text(`¿Comió?: ${a.comio ? 'Sí' : 'No'}`, 15, y + 22);
+    doc.text(`Fecha y hora: ${formatearFechaHora(a.fechayhora || a.fecha) || 'N/A'}`, 15, y + 29);
+    doc.text(`Observaciones: ${a.obsAdicionales || 'Ninguna'}`, 15, y + 36);
+
+    y += 50;
+
+    if (y > 270) {
+      doc.addPage();
+      this.agregarEncabezado(doc, titulo);
+      y = 30;
+    }
+  });
+
+  const nombreArchivo = 'historial_alimentacion.pdf';
+
+  if (Capacitor.getPlatform() !== 'web') {
+    const pdfOutput = doc.output('datauristring');
+    const base64Data = pdfOutput.split(',')[1];
+
+    const usuarioRaw = localStorage.getItem('usuarioLogin');
+    const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
+
+    if (!email) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Usuario no válido',
+        text: 'No se encontró el correo electrónico del usuario.',
+        confirmButtonText: 'OK',
+        heightAuto: false
+      });
       return;
     }
 
-    const doc = new jsPDF();
-    const titulo = `Historial de Alimentación de ${nombreMascota || 'Mascota'}`;
-    this.agregarEncabezado(doc, titulo);
+    const payload = {
+      email,
+      asunto: `Historial de alimentación de ${nombreMascota || 'Mascota'}`,
+      nombreArchivo,
+      pdfBase64: base64Data,
+    };
 
-    let y = 30;
+    const loading = await this.loadingController.create({
+      message: 'Enviando PDF...',
+      spinner: 'circles'
+    });
+    await loading.present();
 
-    alimentaciones.forEach(a => {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(10, 45, 105);
-      doc.text(`• ${a.tipoAlimento || 'Tipo no especificado'} - ${a.nombreAlimento || 'Nombre no especificado'}`, 10, y);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-
-      doc.text(`Cantidad: ${a.cantidad || 'N/A'}`, 15, y + 8);
-      doc.text(`Método: ${a.metodo || 'N/A'}`, 15, y + 15);
-      doc.text(`¿Comió?: ${a.comio ? 'Sí' : 'No'}`, 15, y + 22);
-      doc.text(`Fecha y hora: ${formatearFechaHora(a.fechayhora || a.fecha) || 'N/A'}`, 15, y + 29);
-      doc.text(`Observaciones: ${a.obsAdicionales || 'Ninguna'}`, 15, y + 36);
-
-      y += 50;
-
-      if (y > 270) {
-        doc.addPage();
-        this.agregarEncabezado(doc, titulo);
-        y = 30;
+    this.http.post(`${environment.backendUrl}/enviar-pdf`, payload).subscribe({
+      next: async () => {
+        await loading.dismiss();
+        Swal.fire({
+          icon: 'success',
+          title: '¡Enviado!',
+          text: '📧 PDF enviado correctamente por correo.',
+          confirmButtonText: 'OK',
+          heightAuto: false
+        });
+      },
+      error: async err => {
+        console.error('❌ Error al enviar PDF:', err);
+        await loading.dismiss();
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo enviar el PDF por correo.',
+          confirmButtonText: 'OK',
+          heightAuto: false
+        });
       }
     });
 
-    const nombreArchivo = 'historial_alimentacion.pdf';
-
-    if (Capacitor.isNativePlatform()) {
-      const pdfOutput = doc.output('datauristring');
-      const base64Data = pdfOutput.split(',')[1];
-
-      // Simula obtener el correo del usuario logueado
-      const usuarioRaw = localStorage.getItem('usuarioLogin');
-      const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
-
-      if (!email) {
-        alert('No se encontró el correo electrónico del usuario.');
-        return;
-      }
-
-      const payload = {
-        email: email,
-        asunto: `Historial de alimentación de ${nombreMascota || 'Mascota'}`,
-        nombreArchivo: nombreArchivo,
-        pdfBase64: base64Data,
-      };
-
-      this.http.post(`${environment.backendUrl}/api/enviar-pdf`, payload).subscribe({
-        next: () => {
-          alert('📧 PDF enviado correctamente por correo.');
-        },
-        error: err => {
-          console.error('❌ Error al enviar PDF:', err);
-          alert('No se pudo enviar el PDF por correo.');
-        }
-      });
-
-    } else {
-      doc.save(nombreArchivo); // web
-    }
+  } else {
+    doc.save(nombreArchivo); // Web
   }
-
+}
 }
