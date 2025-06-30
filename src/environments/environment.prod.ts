@@ -8,6 +8,7 @@ export const environment = {
     messagingSenderId: "731530411521",
     appId: "1:731530411521:web:1013773ffd4e72a86c8a00",
     measurementId: "G-GYMT1WK897"
-  }
+  },
+  backendUrl: 'https://newpawcareapp.onrender.com/api' 
 };
 

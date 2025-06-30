@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';  // import compat firestore
 import jsPDF from 'jspdf';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportarpdfService {
-  constructor(private afs: AngularFirestore) {}  // usar AngularFirestore de compat
+  constructor(private afs: AngularFirestore, private http: HttpClient) {}  // usar AngularFirestore de compat
 
   exportarHistorialMedico(registros: any[], nombreMascota: string, formatearFecha: (fecha: any) => string) {
     if (registros.length === 0) {
@@ -213,6 +217,41 @@ export class ExportarpdfService {
       }
     });
 
-    doc.save('historial_alimentacion.pdf');
+    const nombreArchivo = 'historial_alimentacion.pdf';
+
+    if (Capacitor.isNativePlatform()) {
+      const pdfOutput = doc.output('datauristring');
+      const base64Data = pdfOutput.split(',')[1];
+
+      // Simula obtener el correo del usuario logueado
+      const usuarioRaw = localStorage.getItem('usuarioLogin');
+      const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
+
+      if (!email) {
+        alert('No se encontró el correo electrónico del usuario.');
+        return;
+      }
+
+      const payload = {
+        email: email,
+        asunto: `Historial de alimentación de ${nombreMascota || 'Mascota'}`,
+        nombreArchivo: nombreArchivo,
+        pdfBase64: base64Data,
+      };
+
+      this.http.post(`${environment.backendUrl}/api/enviar-pdf`, payload).subscribe({
+        next: () => {
+          alert('📧 PDF enviado correctamente por correo.');
+        },
+        error: err => {
+          console.error('❌ Error al enviar PDF:', err);
+          alert('No se pudo enviar el PDF por correo.');
+        }
+      });
+
+    } else {
+      doc.save(nombreArchivo); // web
+    }
   }
+
 }

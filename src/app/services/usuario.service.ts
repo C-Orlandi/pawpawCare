@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Usuario } from '../interfaces/usuario';
 import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class UsuariosService {
 
   private collectionName = 'usuarios';
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.backendUrl;
 
   constructor(
     private firestore: AngularFirestore,

@@ -31,12 +31,14 @@ const bucket = admin.storage().bucket();
 const mapsRoutes = require('./maps');
 const notiRoutes = require('./noti');
 const userRoutes = require('./users');
+const pdfRoutes = require('./pdf');
 
 // 📦 Rutas
 
 app.use('/api', mapsRoutes);
 app.use('/api', notiRoutes);
 app.use('/api', userRoutes);
+app.use('/api', pdfRoutes);
 
 // Configurar Multer (subida a carpeta temporal)
 const upload = multer({ dest: 'uploads/' });

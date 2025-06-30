@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
-  private backendUrl = 'http://localhost:3000/api';
+  private backendUrl = 'https://newpawcareapp.onrender.com/api';
 
   constructor(private afAuth: AngularFireAuth, private http: HttpClient) {}
 
