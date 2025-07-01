@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-registro-mascota',
@@ -131,10 +132,17 @@ export class RegistroMascotaPage implements OnInit {
       const mid = this.modoEdicion && this.midExistente ? this.midExistente : uuidv4();
 
       let urlImagen = this.imagenAnterior || '';
+      let rutaImagenPath = '';
+
       if (this.imagenFile) {
+        const nombreArchivo = `${Date.now()}_${this.imagenFile.name}`;
+        const imagenPath = `mascotas/${nombreArchivo}`;
+        rutaImagenPath = imagenPath;
+
         const formData = new FormData();
         formData.append('foto', this.imagenFile);
-        const uploadResponse: any = await this.http.post('http://localhost:3000/upload', formData).toPromise();
+
+        const uploadResponse: any = await this.http.post(`${environment.backendUrl}/upload`, formData).toPromise();
         urlImagen = uploadResponse.url;
       }
 
@@ -143,6 +151,7 @@ export class RegistroMascotaPage implements OnInit {
         ...data,
         edad: edadCalculada,
         imagen: urlImagen,
+        imagenPath: rutaImagenPath || null,
         usuarioUid: this.usuarioLogin?.uid || 'desconocido',
         dueno: {
           nombre: this.usuarioLogin?.nombre || 'No registrado',

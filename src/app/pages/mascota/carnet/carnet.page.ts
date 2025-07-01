@@ -43,10 +43,7 @@ export class CarnetPage implements OnInit {
       doc.text('Carnet Digital de Mascota', ancho / 2, y, { align: 'center' });
       y += 10;
 
-      const imageUrl = this.mascota?.imagen || 'assets/mascotas/default.jpg';
-      console.log('🔗 URL imagen usada:', imageUrl); // <-- añade esto
-
-      const imgBase64 = await this.loadImageViaDOM(imageUrl);
+      const imgBase64 = await this.loadImageViaDOM();
 
       if (imgBase64) {
         doc.addImage(imgBase64, 'JPEG', (ancho - 50) / 2, y, 50, 50);
@@ -161,18 +158,21 @@ export class CarnetPage implements OnInit {
     }); 
   }
 
-  private async loadImageViaDOM(url: string): Promise<string | null> {
+  private async loadImageViaDOM(): Promise<string | null> {
     try {
+      const imagePath = this.mascota?.imagenPath || 'mascotas/default.jpg';
+
       const response = await this.http
-        .get<{ base64: string }>(`${environment.backendUrl}/imagen-firebase?url=${encodeURIComponent(url)}`)
+        .get<{ base64: string }>(`${environment.backendUrl}/api/imagen-firebase?path=${encodeURIComponent(imagePath)}`)
         .toPromise();
 
       return response?.base64 || null;
     } catch (err) {
-      console.error('❌ Error cargando imagen desde backend:', err);
+      console.error('❌ Error cargando imagen desde backend por path:', err);
       return null;
     }
   }
+
 }
 
 

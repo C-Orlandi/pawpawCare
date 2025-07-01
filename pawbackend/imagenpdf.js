@@ -1,21 +1,24 @@
 const express = require('express');
-const fetch = require('node-fetch');
+const admin = require('firebase-admin');
 const router = express.Router();
 
 router.get('/imagen-firebase', async (req, res) => {
-  const imageUrl = decodeURIComponent(req.query.url);
+  const pathInBucket = req.query.path;
 
-  if (!imageUrl) {
-    return res.status(400).json({ error: 'URL de imagen faltante.' });
+  if (!pathInBucket) {
+    return res.status(400).json({ error: 'Ruta del archivo faltante.' });
   }
 
   try {
-    const response = await fetch(imageUrl);
-    if (!response.ok) {
-      throw new Error(`Error al obtener imagen: ${response.statusText}`);
+    const bucket = admin.storage().bucket();
+    const file = bucket.file(pathInBucket);
+
+    const [exists] = await file.exists();
+    if (!exists) {
+      return res.status(404).json({ error: 'Archivo no encontrado en el bucket.' });
     }
 
-    const buffer = await response.buffer();
+    const [buffer] = await file.download();
     const base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`;
 
     res.status(200).json({ base64: base64Image });
