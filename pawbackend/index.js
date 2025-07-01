@@ -33,6 +33,7 @@ const mapsRoutes = require('./maps');
 const notiRoutes = require('./noti');
 const userRoutes = require('./users');
 const pdfRoutes = require('./pdf');
+const imgpdfRoutes = require('./imagenpdf');
 
 // 📦 Rutas
 
@@ -40,6 +41,7 @@ app.use('/api', mapsRoutes);
 app.use('/api', notiRoutes);
 app.use('/api', userRoutes);
 app.use('/api', pdfRoutes);
+app.use('/api', imgpdfRoutes);
 
 // Configurar Multer (subida a carpeta temporal)
 const upload = multer({ dest: 'uploads/' });
