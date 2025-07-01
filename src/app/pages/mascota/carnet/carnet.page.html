@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar color="tertiary">
     <ion-title>Carnet de {{ mascota?.nombre }}</ion-title>
+    <ion-button expand="full" color="primary" (click)="exportarCarnet()">
+    Enviar carnet por correo
+  </ion-button>
   </ion-toolbar>
 </ion-header>
 
