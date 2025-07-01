@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { Platform, AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
-declare let navigator: any; // 👈 Agrega esto
+declare let navigator: any;
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent {
   public appPages = [
@@ -19,48 +19,27 @@ export class AppComponent {
     { title: 'Trash', url: '/folder/trash', icon: 'trash' },
     { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];
-
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
   constructor(
     private platform: Platform,
-    private alertController: AlertController,
     private location: Location,
     private router: Router
   ) {
-    this.initializeApp();
+    this.initializeBackButton();
   }
 
-  initializeApp() {
+  initializeBackButton() {
     this.platform.ready().then(() => {
-      this.handleBackButton();
-    });
-  }
+      this.platform.backButton.subscribeWithPriority(10, () => {
+        const currentUrl = this.router.url;
 
-  handleBackButton() {
-    this.platform.backButton.subscribeWithPriority(10, async () => {
-      const currentUrl = this.router.url;
-      const rutasRaiz = ['/tabs/home', '/tabs', '/inicio', '/login'];
-
-      if (rutasRaiz.includes(currentUrl)) {
-        const alerta = await this.alertController.create({
-          header: 'Salir de la app',
-          message: '¿Deseas cerrar la aplicación?',
-          buttons: [
-            { text: 'Cancelar', role: 'cancel' },
-            {
-              text: 'Salir',
-              role: 'destructive',
-              handler: () => {
-                navigator['app'].exitApp(); // 👈 Ya no marcará error
-              }
-            }
-          ]
-        });
-        await alerta.present();
-      } else {
-        this.location.back();
-      }
+        if (currentUrl === '/home') {
+          navigator['app'].exitApp(); // salir si estás en /home
+        } else {
+          this.location.back(); // retroceder
+        }
+      });
     });
   }
 }
