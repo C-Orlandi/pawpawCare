@@ -69,6 +69,7 @@ export class ModalUsuarioComponent implements OnInit {
           uid: usuarioActualizado.uid,
           nombre: usuarioActualizado.nombre,
           email: usuarioActualizado.email,
+          contacto: usuarioActualizado.contacto || '',
           creadoEn: new Date()
         });
 
@@ -91,8 +92,7 @@ export class ModalUsuarioComponent implements OnInit {
         this.modalCtrl.dismiss(true);
 
       } else {
-        // Crear usuario nuevo (Auth + Firestore)
-        // Simplemente espera la promesa directamente
+        // Crear usuario en Auth y Firestore
         const aux = await this.authService.register(formValue.email, formValue.pass);
 
         const user = aux.user;
@@ -108,6 +108,7 @@ export class ModalUsuarioComponent implements OnInit {
           uid: user.uid,
           nombre: formValue.nombre,
           email: formValue.email,
+          contacto: formValue.contacto || '',
           creadoEn: new Date()
         });
 

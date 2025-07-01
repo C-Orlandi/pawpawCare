@@ -6,6 +6,7 @@ import { Usuario } from 'src/app/interfaces/usuario';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import firebase from 'firebase/compat/app';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -28,7 +29,8 @@ export class PerfilUsuarioPage implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private firestore: AngularFirestore
   ) {}
 
   async ngOnInit() {
@@ -65,6 +67,8 @@ export class PerfilUsuarioPage implements OnInit {
         nombre: this.nombre,
         contacto: this.contacto
       }).toPromise();
+      //actualizar mascotas
+      await this.actualizarDatosEnMascotas(this.usuarioAuth.uid, this.nombre, this.contacto);
 
       await loading.dismiss();
 
@@ -127,4 +131,27 @@ export class PerfilUsuarioPage implements OnInit {
 
     await alert.present();
   }
+
+  async actualizarDatosEnMascotas(uid: string, nuevoNombre: string, nuevoContacto: string) {
+    const snapshot = await this.firestore.collection('mascotas', ref =>
+      ref.where('usuarioUid', '==', uid)
+    ).get().toPromise();
+
+    console.log('🐾 Mascotas encontradas:', snapshot?.size);
+
+    const batch = this.firestore.firestore.batch();
+
+    snapshot?.forEach(doc => {
+      console.log('🔁 Actualizando mascota:', doc.id);
+      const mascotaRef = this.firestore.firestore.collection('mascotas').doc(doc.id);
+      batch.update(mascotaRef, {
+        'dueno.nombre': nuevoNombre,
+        'dueno.contacto': nuevoContacto
+      });
+    });
+
+    await batch.commit();
+  }
+
+
 }
