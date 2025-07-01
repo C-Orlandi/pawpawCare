@@ -163,7 +163,7 @@ export class CarnetPage implements OnInit {
       const imagePath = this.mascota?.imagenPath || 'mascotas/default.jpg';
 
       const response = await this.http
-        .get<{ base64: string }>(`${environment.backendUrl}/api/imagen-firebase?path=${encodeURIComponent(imagePath)}`)
+        .get<{ base64: string }>(`${environment.backendUrl}/imagen-firebase?path=${encodeURIComponent(imagePath)}`)
         .toPromise();
 
       return response?.base64 || null;
