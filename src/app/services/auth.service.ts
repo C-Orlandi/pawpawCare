@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private backendUrl = 'https://newpawcareapp.onrender.com/api';
+  private backendUrl = environment.backendUrl;
 
   constructor(private afAuth: AngularFireAuth, private http: HttpClient) {}
 
