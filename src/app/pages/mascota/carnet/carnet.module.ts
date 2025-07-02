@@ -8,6 +8,7 @@ import { CarnetPageRoutingModule } from './carnet-routing.module';
 
 import { CarnetPage } from './carnet.page';
 import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
     IonicModule,
     CarnetPageRoutingModule
   ],
-  declarations: [CarnetPage, CapitalizarPipe]
+  declarations: [CarnetPage]
 })
 export class CarnetPageModule {}

@@ -18,6 +18,6 @@ import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
     ReactiveFormsModule,
     GestionarMascotaPageRoutingModule
   ],
-  declarations: [GestionarMascotaPage, ModalMascotaComponent, CapitalizarPipe]
+  declarations: [GestionarMascotaPage, ModalMascotaComponent]
 })
 export class GestionarMascotaPageModule {}

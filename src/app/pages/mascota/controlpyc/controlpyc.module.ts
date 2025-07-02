@@ -9,6 +9,7 @@ import { ControlpycPageRoutingModule } from './controlpyc-routing.module';
 import { ControlpycPage } from './controlpyc.page';
 import { ModalControlpycComponent } from 'src/app/components/modal-controlpyc/modal-controlpyc.component';
 import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
+import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
     ReactiveFormsModule,
     ControlpycPageRoutingModule
   ],
-  declarations: [ControlpycPage, ModalControlpycComponent, CapitalizarPipe]
+  declarations: [ControlpycPage, ModalControlpycComponent]
 })
 export class ControlpycPageModule {}
