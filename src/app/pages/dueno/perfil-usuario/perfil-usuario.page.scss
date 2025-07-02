@@ -1,0 +1,27 @@
+.perfil-card {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  padding-bottom: 16px;
+}
+
+.titulo-perfil {
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--ion-color-dark);
+}
+
+.input-estilo {
+  margin-bottom: 16px;
+  border-radius: 12px;
+}
+
+.btn-guardar {
+  margin-top: 20px;
+}
+
+.btn-eliminar {
+  margin-top: 10px;
+  opacity: 0.9;
+}

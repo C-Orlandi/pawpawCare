@@ -4,7 +4,7 @@ import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-carnet',
@@ -15,7 +15,7 @@ export class CarnetPage implements OnInit {
   
   mascota: any;
 
-  constructor(private http: HttpClient, private loadingController: LoadingController) {}
+  constructor(private http: HttpClient, private loadingController: LoadingController, private navCtrl: NavController) {}
   
   ngOnInit() {
     const data = localStorage.getItem('mascotaSeleccionada');
@@ -171,6 +171,10 @@ export class CarnetPage implements OnInit {
       console.error('❌ Error cargando imagen desde backend por path:', err);
       return null;
     }
+  }
+
+  goBack() {
+  this.navCtrl.back();
   }
 
 }

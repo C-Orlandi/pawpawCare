@@ -22,24 +22,41 @@
       private loadingCtrl: LoadingController
     ) {}
 
-    ngOnInit() {  
-      this.mascotaForm = this.fb.group({
-        usuarioUid: [this.mascota?.usuarioUid || '', Validators.required],
-        nombre: [this.mascota?.nombre || '', [Validators.required, Validators.minLength(2)]],
-        tipo: [this.mascota?.tipo || '', [Validators.required, Validators.minLength(2)]],
-        raza: [this.mascota?.raza || '', [Validators.required, Validators.minLength(2)]],
-        sexo: ['', Validators.required],
-        fechaNacimiento: [this.mascota?.fechaNacimiento || '', Validators.required],
-        color: ['', [Validators.required, Validators.minLength(3)]],
-        chip: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-        peso: [this.mascota?.peso || '', [Validators.required, Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]],
-        categoria: ['', Validators.required],
-        tieneVacunas: [false]
-      });
+    ngOnInit() {
+    this.mascotaForm = this.fb.group({
+      usuarioUid: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+      tipo: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+      raza: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+      sexo: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required],
+      color: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+      chip: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      peso: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+      categoria: ['', Validators.required],
+      tieneVacunas: [false]
+    });
 
-      // Con compat:
-      this.usuarios$ = this.firestore.collection('usuarios', ref => ref.where('tipo', '==', 'dueno')).valueChanges({ idField: 'uid' });
+    if (this.mascota) {
+      this.mascotaForm.patchValue({
+        usuarioUid: this.mascota.usuarioUid,
+        nombre: this.mascota.nombre,
+        tipo: this.mascota.tipo,
+        raza: this.mascota.raza,
+        sexo: this.mascota.sexo,
+        fechaNacimiento: this.mascota.fechaNacimiento,
+        color: this.mascota.color,
+        chip: this.mascota.chip,
+        peso: this.mascota.peso,
+        categoria: this.mascota.categoria,
+        tieneVacunas: this.mascota.tieneVacunas ?? false
+      });
     }
+
+    // Carga los usuarios como antes
+    this.usuarios$ = this.firestore.collection('usuarios', ref => ref.where('tipo', '==', 'dueno')).valueChanges({ idField: 'uid' });
+  }
+
 
     async guardar() {
       if (this.mascotaForm.invalid) {

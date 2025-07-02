@@ -18,3 +18,21 @@
   justify-content: center;
   margin-bottom: 16px;
 }
+
+.password-item {
+  --highlight-color-focused: var(--ion-color-primary); // color del borde cuando enfocado
+  --padding-end: 0;
+
+  .eye-button {
+    margin-right: 6px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --box-shadow: none;
+    --background: transparent;
+    color: var(--ion-color-medium);
+  }
+
+  .eye-button:hover {
+    color: var(--ion-color-dark);
+  }
+}

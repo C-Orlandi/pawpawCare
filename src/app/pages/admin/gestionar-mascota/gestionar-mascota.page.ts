@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { MascotaService } from '../../../services/mascota.service';
 import { DuenoService } from 'src/app/services/dueno.service';
 import { Mascota } from 'src/app/interfaces/mascota';
@@ -21,7 +21,8 @@ export class GestionarMascotaPage implements OnInit {
     private mascotaService: MascotaService,
     private duenoService: DuenoService,
     private modalController: ModalController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -95,4 +96,9 @@ export class GestionarMascotaPage implements OnInit {
   }
 }
 
+  goBack() {
+    this.navCtrl.back();
+  }
 }
+
+

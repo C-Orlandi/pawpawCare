@@ -4,7 +4,7 @@ import { UsuariosService } from 'src/app/services/usuario.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Usuario } from 'src/app/interfaces/usuario';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import firebase from 'firebase/compat/app';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
@@ -20,7 +20,6 @@ export class PerfilUsuarioPage implements OnInit {
 
   nombre = '';
   email = '';
-  password = ''; 
   contacto = '';
 
   constructor(
@@ -30,7 +29,8 @@ export class PerfilUsuarioPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private navCtrl: NavController
   ) {}
 
   async ngOnInit() {
@@ -63,7 +63,6 @@ export class PerfilUsuarioPage implements OnInit {
       await this.usuarioService.actualizarPerfil({
         uid: this.usuarioAuth.uid,
         email: this.email,
-        password: this.password.trim(),
         nombre: this.nombre,
         contacto: this.contacto
       }).toPromise();
@@ -153,5 +152,7 @@ export class PerfilUsuarioPage implements OnInit {
     await batch.commit();
   }
 
-
+  goBack() {
+    this.navCtrl.back();
+  }
 }

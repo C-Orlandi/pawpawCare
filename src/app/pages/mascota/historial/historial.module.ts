@@ -8,6 +8,7 @@ import { HistorialPageRoutingModule } from './historial-routing.module';
 
 import { HistorialPage } from './historial.page';
 import { ModalRmedicoComponent } from 'src/app/components/modal-rmedico/modal-rmedico.component';
+import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ModalRmedicoComponent } from 'src/app/components/modal-rmedico/modal-rm
     ReactiveFormsModule,
     HistorialPageRoutingModule
   ],
-  declarations: [HistorialPage, ModalRmedicoComponent]
+  declarations: [HistorialPage, ModalRmedicoComponent, CapitalizarPipe]
 })
 export class HistorialPageModule {}

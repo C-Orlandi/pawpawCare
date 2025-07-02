@@ -12,10 +12,11 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
+import { CapitalizarPipe } from './pipes/capitalizar.pipe';
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CapitalizarPipe],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

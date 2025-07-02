@@ -1,33 +1,59 @@
 <ion-header>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ mascota?.nombre }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/perfil-menu">
+        <ion-icon name="person"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="mascota-header">
-    <img [src]="mascota?.imagen" alt="Foto de mascota" class="mascota-img" />
-    <h2>{{ mascota?.nombre }}</h2>
+
+  <div class="foto-container" (click)="fileInput.click()">
+    <img [src]="mascota?.imagen" alt="Foto mascota" class="foto-mascota" />
+    <input type="file" hidden #fileInput (change)="onImagenSeleccionada($event)" accept="image/*" />
+    <p class="texto-foto">Toca para cambiar foto</p>
   </div>
 
-  <ion-list>
-    <ion-item button routerLink="/carnet">
-      <ion-label>Carnet</ion-label>
-    </ion-item>
-    <ion-item button routerLink="/historial">
-      <ion-label>Registro Médico Personal</ion-label>
-    </ion-item>
-    <ion-item *ngIf="mostrarVacunas" button routerLink="/vacunas">
-      <ion-label>Vacunas</ion-label>
-    </ion-item>
-    <ion-item button routerLink="/desparasitacion">
-      <ion-label>Desparasitación</ion-label>
-    </ion-item>
-    <ion-item *ngIf="esExotico" button routerLink="/regalimentacion">
-      <ion-label>Registro de Alimentación</ion-label>
-    </ion-item>
-    <ion-item *ngIf="esExotico" button routerLink="/controlpyc">
-      <ion-label>Control de Peso y Crecimiento</ion-label>
-    </ion-item>
-  </ion-list>
+  <ion-card>
+    <ion-list lines="none">
+      <ion-item button routerLink="/carnet" detail="true" lines="full">
+        <ion-icon slot="start" name="document-text-outline" color="tertiary"></ion-icon>
+        <ion-label>Carnet</ion-label>
+      </ion-item>
+
+      <ion-item button routerLink="/historial" detail="true" lines="full">
+        <ion-icon slot="start" name="medkit-outline" color="tertiary"></ion-icon>
+        <ion-label>Registro Médico Personal</ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="mostrarVacunas" button routerLink="/vacunas" detail="true" lines="full">
+        <ion-icon slot="start" name="shield-checkmark-outline" color="tertiary"></ion-icon>
+        <ion-label>Vacunas</ion-label>
+      </ion-item>
+
+      <ion-item button routerLink="/desparasitacion" detail="true" lines="full">
+        <ion-icon slot="start" name="bug-outline" color="tertiary"></ion-icon>
+        <ion-label>Desparasitación</ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="esExotico" button routerLink="/regalimentacion" detail="true" lines="full">
+        <ion-icon slot="start" name="restaurant-outline" color="tertiary"></ion-icon>
+        <ion-label>Registro de Alimentación</ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="esExotico" button routerLink="/controlpyc" detail="true" lines="full">
+        <ion-icon slot="start" name="barbell-outline" color="tertiary"></ion-icon>
+        <ion-label>Control de Peso y Crecimiento</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
 </ion-content>

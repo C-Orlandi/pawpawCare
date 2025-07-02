@@ -1,60 +1,82 @@
 <ion-header>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Veterinarias Cercanas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding content-background">
 
-  <!-- Filtros en select -->
-  <ion-item>
-    <ion-label>Filtro veterinaria</ion-label>
-    <ion-select [(ngModel)]="tipoVeterinaria" (ionChange)="onFiltroCambiar()" placeholder="Selecciona un filtro...">
-      <ion-select-option value="">Seleccionar</ion-select-option>
-      <ion-select-option value="domestico">Doméstico</ion-select-option>
-      <ion-select-option value="exotico">Exótico</ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-card class="filtro-card">
+    <ion-card-header>
+      <ion-card-title>Filtrar por tipo</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none" class="filtro-item">
+        <ion-label>Veterinaria</ion-label>
+        <ion-select [(ngModel)]="tipoVeterinaria" (ionChange)="onFiltroCambiar()" placeholder="Selecciona...">
+          <ion-select-option value="">Seleccionar</ion-select-option>
+          <ion-select-option value="domestico">Doméstico</ion-select-option>
+          <ion-select-option value="exotico">Exótico</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
-  <!-- Spinner mientras carga -->
+  <!-- spinner -->
   <div *ngIf="cargando" class="spinner-center">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando veterinarias...</p>
+    <ion-spinner name="crescent" color="tertiary"></ion-spinner>
+    <p class="spinner-texto">Buscando veterinarias cercanas...</p>
   </div>
 
-  <!-- Mensaje si no hay resultados -->
-  <div *ngIf="!cargando && markers.length === 0" class="mensaje-vacio">
-    No se encontraron veterinarias con el filtro seleccionado.
-  </div>
+  <!-- sin resultados -->
+<div *ngIf="!cargando && tipoVeterinaria === ''" class="mensaje-vacio">
+  <ion-icon name="information-circle-outline" class="mensaje-icono"></ion-icon>
+  <p>Selecciona un filtro para ver veterinarias cercanas.</p>
+</div>
 
-  <!-- Mensaje si hay resultados -->
+<!-- mensaje si no se encontraron resultados para el filtro -->
+<div *ngIf="!cargando && tipoVeterinaria !== '' && markers.length === 0" class="mensaje-vacio">
+  <ion-icon name="alert-circle-outline" class="mensaje-icono"></ion-icon>
+  <p>No se encontraron veterinarias para el filtro seleccionado.</p>
+</div>
+
+  <!-- resultados encontrados -->
   <div *ngIf="!cargando && markers.length > 0" class="mensaje-encontrados">
-    {{ markers.length }} resultado{{ markers.length > 1 ? 's' : '' }} encontrado{{ markers.length > 1 ? 's' : '' }}.
+    <ion-icon name="checkmark-circle-outline" class="mensaje-icono"></ion-icon>
+    <p>
+      {{ markers.length }} resultado{{ markers.length > 1 ? 's' : '' }} encontrado{{ markers.length > 1 ? 's' : '' }}.
+    </p>
   </div>
 
-  <!-- Google Map con tamaño fijo y borde redondeado -->
-  <google-map
-    height="400px"
-    width="100%"
-    [center]="center"
-    [zoom]="zoom"
-    (mapReady)="crearOActualizarCirculo()"
-    #map>
-    
-    <!-- Marcador usuario -->
-    <map-marker
-      [position]="userMarker.position"
-      [title]="userMarker.title"
-      [options]="userMarker.options">
-    </map-marker>
+  <!-- mapa -->
+  <div *ngIf="!cargando" class="mapa-container fade-in">
+    <google-map
+      height="400px"
+      width="100%"
+      [center]="center"
+      [zoom]="zoom"
+      (mapReady)="crearOActualizarCirculo()"
+      #map>
+      <!-- ubicación del usuario -->
+      <map-marker
+        [position]="userMarker.position"
+        [title]="userMarker.title"
+        [options]="userMarker.options">
+      </map-marker>
 
-    <!-- Marcadores veterinarias -->
-    <map-marker *ngFor="let marker of markers"
-      [position]="marker.position"
-      [title]="marker.title"
-      [options]="marker.options"
-      (mapClick)="abrirGoogleMaps(marker.placeId)">
-    </map-marker>
-  </google-map>
+      <!-- marcadores -->
+      <map-marker *ngFor="let marker of markers"
+        [position]="marker.position"
+        [title]="marker.title"
+        [options]="marker.options"
+        (mapClick)="abrirGoogleMaps(marker.placeId)">
+      </map-marker>
+    </google-map>
+  </div>
 
 </ion-content>

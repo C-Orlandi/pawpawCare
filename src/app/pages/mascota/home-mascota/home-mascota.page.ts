@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home-mascota',
@@ -11,7 +14,7 @@ export class HomeMascotaPage {
   esExotico = false;
   mostrarVacunas = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private firestore: AngularFirestore, private http: HttpClient) {}
 
   ionViewWillEnter() {
     const data = localStorage.getItem('mascotaSeleccionada');
@@ -22,7 +25,32 @@ export class HomeMascotaPage {
     }
   }
 
-  goTo(pagina: string) {
-    this.router.navigateByUrl(`/${pagina}`);
+  async onImagenSeleccionada(event: any) {
+    const file = event.target.files[0];
+    if (!file || !this.mascota?.mid) return;
+
+    const formData = new FormData();
+    formData.append('foto', file);
+
+    try {
+      // Opcional: muestra carga
+      const uploadRes: any = await this.http.post(`${environment.backendUrl.replace('/api', '')}/upload`, formData).toPromise();
+
+      const nuevaUrl = uploadRes.url;
+
+      // Actualizar en Firestore
+      await this.firestore.collection('mascotas').doc(this.mascota.mid).update({
+        imagen: nuevaUrl
+      });
+
+      // Actualizar localmente
+      this.mascota.imagen = nuevaUrl;
+    } catch (error) {
+      console.error('Error al actualizar imagen:', error);
+    }
+  }
+
+  goBack() {
+    this.router.navigate(['/mis-mascotas'], { queryParams: { updated: '1' } });
   }
 }

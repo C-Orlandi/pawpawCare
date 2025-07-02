@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar>
     <ion-title>{{ usuario ? 'Editar Usuario' : 'Nuevo Usuario' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="cerrar()">Cerrar</ion-button>
@@ -16,8 +16,16 @@
           <ion-label position="floating">Nombre <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="nombre"></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="usuarioForm.get('nombre')?.touched && usuarioForm.get('nombre')?.hasError('required')">
-          <p class="ion-padding-start">El nombre es obligatorio.</p>
+        <ion-text color="danger" *ngIf="usuarioForm.get('nombre')?.touched">
+          <ng-container *ngIf="usuarioForm.get('nombre')?.hasError('required')">
+            <small class="ion-padding-start">El nombre es obligatorio.</small>
+          </ng-container>
+          <ng-container *ngIf="usuarioForm.get('nombre')?.hasError('minlength')">
+            <small class="ion-padding-start">Debe tener al menos 2 caracteres.</small>
+          </ng-container>
+          <ng-container *ngIf="usuarioForm.get('nombre')?.hasError('pattern')">
+            <small class="ion-padding-start">Solo se permiten letras y espacios.</small>
+          </ng-container>
         </ion-text>
 
         <ion-item lines="inset">
@@ -25,10 +33,10 @@
           <ion-input type="email" formControlName="email"></ion-input>
         </ion-item>
         <ion-text color="danger" *ngIf="usuarioForm.get('email')?.touched && usuarioForm.get('email')?.hasError('required')">
-          <p class="ion-padding-start">El email es obligatorio.</p>
+          <small class="ion-padding-start">El email es obligatorio.</small>
         </ion-text>
         <ion-text color="danger" *ngIf="usuarioForm.get('email')?.touched && usuarioForm.get('email')?.hasError('email')">
-          <p class="ion-padding-start">Email inválido.</p>
+          <small class="ion-padding-s tart">Email inválido.</small>
         </ion-text>
 
         <ion-item lines="inset">
@@ -36,7 +44,10 @@
           <ion-input type="text" formControlName="pass"></ion-input>
         </ion-item>
         <ion-text color="danger" *ngIf="usuarioForm.get('pass')?.touched && usuarioForm.get('pass')?.hasError('required')">
-          <p class="ion-padding-start">La contraseña es obligatoria.</p>
+          <small class="ion-padding-start">La contraseña es obligatoria.</small>
+          <ion-text color="danger" *ngIf="usuarioForm.get('pass')?.touched && usuarioForm.get('pass')?.hasError('minlength')">
+          <small class="ion-padding-start">Debe tener al menos 6 caracteres.</small>
+        </ion-text>
         </ion-text>
 
         <ion-item lines="none">
@@ -50,7 +61,7 @@
           </ion-select>
         </ion-item>
         <ion-text color="danger" *ngIf="usuarioForm.get('tipo')?.touched && usuarioForm.get('tipo')?.hasError('required')">
-          <p class="ion-padding-start">El tipo es obligatorio.</p>
+          <small class="ion-padding-start">El tipo es obligatorio.</small>
         </ion-text>
 
         <ion-button expand="block" shape="round" size="large" class="ion-margin-top" type="submit" color="dark" [disabled]="usuarioForm.invalid" style="font-size: 15px;">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { ControlpycService } from 'src/app/services/controlpyc.service';
 import { ModalControlpycComponent } from 'src/app/components/modal-controlpyc/modal-controlpyc.component';
@@ -22,7 +22,8 @@ export class ControlpycPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private exportarpdf: ExportarpdfService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -110,5 +111,9 @@ export class ControlpycPage implements OnInit {
 
   exportarPDF() {
     this.exportarpdf.exportarControles(this.controles, this.mascotaSeleccionada?.nombre, this.formatearFechaHora);
+  }
+
+  goBack() {
+  this.navCtrl.back();
   }
 }

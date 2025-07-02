@@ -37,4 +37,19 @@ export class MascotaService {
   eliminarMascota(mid: string): Promise<void> {
     return this.firestore.doc(`${this.coleccion}/${mid}`).delete();
   }
+
+  async eliminarMascotasDeUsuario(usuarioUid: string): Promise<void> {
+    const snapshot = await this.firestore.collection('mascotas', ref =>
+      ref.where('usuarioUid', '==', usuarioUid)
+    ).get().toPromise();
+
+    const batch = this.firestore.firestore.batch();
+
+    snapshot?.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+  }
 }
+

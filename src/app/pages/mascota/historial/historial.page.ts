@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController, LoadingController } from '@ionic/angular';
+import { ModalController, AlertController, LoadingController, NavController } from '@ionic/angular';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { ModalRmedicoComponent } from 'src/app/components/modal-rmedico/modal-rmedico.component';
 import { ExportarpdfService } from 'src/app/services/exportarpdf.service';
 import Swal from 'sweetalert2';
+import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @Component({
   selector: 'app-historial',
@@ -21,7 +22,8 @@ export class HistorialPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private exportarpdf: ExportarpdfService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -141,4 +143,9 @@ export class HistorialPage implements OnInit {
       this.formatearFecha
     );
   }
+
+  goBack() {
+  this.navCtrl.back();
+  }
+
 }

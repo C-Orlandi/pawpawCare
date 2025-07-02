@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-geolocalizacion',
@@ -37,7 +38,7 @@ export class GeolocalizacionPage implements OnInit {
 
   cargando = false;
 
-  constructor(private alertCtrl: AlertController, private http: HttpClient, private zone: NgZone) {}
+  constructor(private alertCtrl: AlertController, private http: HttpClient, private zone: NgZone, private router: Router) {}
 
   async ngOnInit() {
     await this.obtenerUbicacion();
@@ -163,5 +164,9 @@ export class GeolocalizacionPage implements OnInit {
   abrirGoogleMaps(placeId: string) {
     const url = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
     window.open(url, '_blank');
+  }
+
+  goBack() {
+    this.router.navigate(['/userhome'], { queryParams: { updated: '1' } });
   }
 }

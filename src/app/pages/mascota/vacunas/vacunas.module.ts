@@ -8,6 +8,7 @@ import { VacunasPageRoutingModule } from './vacunas-routing.module';
 
 import { VacunasPage } from './vacunas.page';
 import { ModalVacunaComponent } from 'src/app/components/modal-vacuna/modal-vacuna.component';
+import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ModalVacunaComponent } from 'src/app/components/modal-vacuna/modal-vacu
     ReactiveFormsModule,
     VacunasPageRoutingModule
   ],
-  declarations: [VacunasPage, ModalVacunaComponent]
+  declarations: [VacunasPage, ModalVacunaComponent, CapitalizarPipe]
 })
 export class VacunasPageModule {}

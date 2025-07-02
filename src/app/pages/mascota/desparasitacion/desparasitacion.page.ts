@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { DesparasitacionService } from 'src/app/services/desparasitacion.service';
 import { ModalDesparasitacionComponent } from 'src/app/components/modal-desparasitacion/modal-desparasitacion.component';
@@ -23,7 +23,9 @@ export class DesparasitacionPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private exportarpdf: ExportarpdfService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
+    
   ) {}
 
   ngOnInit() {
@@ -130,6 +132,10 @@ export class DesparasitacionPage implements OnInit {
       this.mascotaSeleccionada?.nombre,
       this.formatearFechaHora
     );
+  }
+
+  goBack() {
+  this.navCtrl.back();
   }
 }
 

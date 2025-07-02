@@ -1,13 +1,42 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>configuraciones</ion-title>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Configuraciones</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">configuraciones</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+
+  <ion-item button (click)="toggleCambiarPassword()" class="item-toggle" lines="none">
+    <ion-label>Cambiar Contraseña</ion-label>
+    <ion-icon slot="end" [name]="mostrarPassword ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+  </ion-item>
+
+  <form [formGroup]="formPassword" *ngIf="mostrarPassword" class="password-section" (ngSubmit)="guardarCambios()">
+
+    <ion-item class="input-password" lines="full" fill="outline">
+      <ion-label position="floating">Nueva Contraseña</ion-label>
+      <ion-input formControlName="password" type="password" placeholder="ej: Xedfe@" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formPassword.get('password')?.touched && formPassword.get('password')?.errors?.['minlength']">
+      La contraseña debe tener al menos 6 caracteres.
+    </ion-text>
+
+    <ion-item class="input-password" lines="full" fill="outline">
+      <ion-label position="floating">Confirmar Contraseña</ion-label>
+      <ion-input formControlName="passwordConfirm" type="password" placeholder="ej: Xedfe@" required></ion-input>
+    </ion-item>
+    <ion-text color="danger" *ngIf="formPassword.touched && formPassword.errors?.['noIguales']">
+      Las contraseñas no coinciden.
+    </ion-text>
+
+    <ion-button expand="block" type="submit" color="dark" [disabled]="formPassword.invalid">
+      Cambiar Contraseña
+    </ion-button>
+  </form>
+
 </ion-content>

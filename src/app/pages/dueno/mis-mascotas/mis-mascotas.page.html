@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="purple">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button fill="clear" (click)="goBack()">
         <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
@@ -17,7 +17,6 @@
 <ion-content class="ion-padding">
   <div class="mascotas-scroll-container">
     <div class="mascotas-scroll">
-
       <ion-card
         class="mascota-card"
         *ngFor="let mascota of mascotas"
@@ -27,7 +26,6 @@
           [src]="mascota.imagen || 'assets/mascotas/default.jpg'"
           alt="Mascota"
         />
-        <div class="nombre">{{ mascota.nombre }}</div>
       </ion-card>
 
       <div class="mascota-add-button" (click)="agregarMascota()">
@@ -36,3 +34,4 @@
     </div>
   </div>
 </ion-content>
+

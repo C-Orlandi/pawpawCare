@@ -35,3 +35,36 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* HEADER ESTILIZADO */
+ion-header.custom-header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 0 0 15px 15px;
+  overflow: hidden;
+}
+
+ion-toolbar {
+  --background: linear-gradient(135deg, #8f49af83,  #441ba3c4); // Degradado morado
+  --color: #ffffff;
+  min-height: 60px;
+}
+
+.header-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  color: #fff;
+}
+
+/* Íconos del header */
+ion-toolbar ion-button ion-icon {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+ion-header{
+    color: aqua;
+}
+

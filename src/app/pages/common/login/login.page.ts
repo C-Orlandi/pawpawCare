@@ -17,6 +17,7 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   emailValue?: string = '';
   passValue?: string = '';
+  verPassword: boolean = false;
   
   constructor(
     private router: Router, 
@@ -35,6 +36,10 @@ export class LoginPage implements OnInit {
   ngOnInit() {
     this.menuController.enable(false);
   }
+
+  togglePassword() {
+    this.verPassword = !this.verPassword;
+  } 
 
   async login() {
     if (this.loginForm.invalid) {

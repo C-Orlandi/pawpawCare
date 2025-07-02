@@ -8,6 +8,7 @@ import { RegalimentacionPageRoutingModule } from './regalimentacion-routing.modu
 
 import { RegalimentacionPage } from './regalimentacion.page';
 import { ModalAlimentacionComponent } from 'src/app/components/modal-alimentacion/modal-alimentacion.component';
+import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ModalAlimentacionComponent } from 'src/app/components/modal-alimentacio
     ReactiveFormsModule,
     RegalimentacionPageRoutingModule
   ],
-  declarations: [RegalimentacionPage, ModalAlimentacionComponent]
+  declarations: [RegalimentacionPage, ModalAlimentacionComponent, CapitalizarPipe]
 })
 export class RegalimentacionPageModule {}

@@ -8,6 +8,7 @@ import { RecordatoriosPageRoutingModule } from './recordatorios-routing.module';
 
 import { RecordatoriosPage } from './recordatorios.page';
 import { ModalRecordatorioComponent } from 'src/app/components/modal-recordatorio/modal-recordatorio.component';
+import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ModalRecordatorioComponent } from 'src/app/components/modal-recordatori
     ReactiveFormsModule,
     RecordatoriosPageRoutingModule
   ],
-  declarations: [RecordatoriosPage, ModalRecordatorioComponent]
+  declarations: [RecordatoriosPage, ModalRecordatorioComponent, CapitalizarPipe]
 })
 export class RecordatoriosPageModule {}

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="purple">
+  <ion-toolbar>
     <ion-title>PawCare Admin</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="logout()">
@@ -16,7 +16,7 @@
       <ion-card-title>¡Hola, {{ usuarioLogin }}! 👋</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Bienvenido/a al panel de administración de <strong>PawCare</strong>.
+      Bienvenido/a al <strong>panel de administración</strong> de PawCare.
     </ion-card-content>
   </ion-card>
 
@@ -28,12 +28,6 @@
         <ion-card-title>Usuarios</ion-card-title>
       </div>
     </div>
-    <ion-card-content>
-      <ion-button expand="full" color="dark" size="large">
-        <ion-icon slot="start" name="people-outline"></ion-icon>
-        Gestionar Usuarios
-      </ion-button>
-    </ion-card-content>
   </ion-card>
 
   <!-- Card Mascotas -->
@@ -44,12 +38,6 @@
         <ion-card-title>Mascotas</ion-card-title>
       </div>
     </div>
-    <ion-card-content>
-      <ion-button expand="full" color="dark" size="large">
-        <ion-icon slot="start" name="paw-outline"></ion-icon>
-        Gestionar Mascotas
-      </ion-button>
-    </ion-card-content>
   </ion-card>
 
 </ion-content>

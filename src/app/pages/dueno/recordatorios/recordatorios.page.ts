@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import {
-  AlertController, LoadingController, ModalController } from '@ionic/angular';
+  AlertController, LoadingController, ModalController, 
+  NavController} from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { ModalRecordatorioComponent } from 'src/app/components/modal-recordatorio/modal-recordatorio.component';
 import Swal from 'sweetalert2';
@@ -24,7 +25,8 @@ export class RecordatoriosPage implements OnInit {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private modalController: ModalController,
-    private http: HttpClient
+    private http: HttpClient,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -210,5 +212,9 @@ export class RecordatoriosPage implements OnInit {
     } catch (error) {
       console.error('Error enviando correo eliminación:', error);
     }
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 }

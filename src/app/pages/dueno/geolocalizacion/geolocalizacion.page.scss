@@ -3,21 +3,80 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 200px;
-  color: var(--ion-color-medium);
-  font-size: 14px;
+  height: 250px;
+  text-align: center;
+  color: #666;
 }
 
-.mensaje-vacio {
+.mensaje-vacio, .mensaje-encontrados {
   text-align: center;
   margin: 20px 0;
-  color: var(--ion-color-medium);
-  font-style: italic;
+  font-size: 0.95rem;
+  color: #444;
 }
 
-.mensaje-encontrados {
+.content-background {
+  background: #f9f9f9;
+}
+
+.filtro-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+}
+
+.filtro-item {
+  --padding-start: 0;
+}
+
+.spinner-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
   text-align: center;
-  margin: 10px 0 20px;
-  color: var(--ion-color-success);
-  font-weight: 500;
+}
+
+.spinner-texto {
+  margin-top: 12px;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.mensaje-vacio, .mensaje-encontrados {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: center;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mensaje-icono {
+  font-size: 28px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.mapa-container {
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  margin-bottom: 20px;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }

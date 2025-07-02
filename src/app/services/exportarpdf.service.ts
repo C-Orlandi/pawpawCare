@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';  // import compat firestore
 import jsPDF from 'jspdf';
 import { Capacitor } from '@capacitor/core';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -12,119 +10,14 @@ import { LoadingController } from '@ionic/angular';
   providedIn: 'root'
 })
 export class ExportarpdfService {
-  constructor(private afs: AngularFirestore, private http: HttpClient, private loadingController: LoadingController) {}  // usar AngularFirestore de compat
+  constructor(
+    private http: HttpClient,
+    private loadingController: LoadingController
+  ) {}
 
-  exportarHistorialMedico(registros: any[], nombreMascota: string, formatearFecha: (fecha: any) => string) {
-    if (registros.length === 0) {
-      alert('No hay registros médicos para exportar.');
-      return;
-    }
-
-    const doc = new jsPDF();
-    const titulo = `Historial Médico de ${nombreMascota || 'Mascota'}`;
-    this.agregarEncabezado(doc, titulo);
-
-    let y = 30;
-
-    registros.forEach(registro => {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(10, 45, 105);
-      doc.text(`• Visita: ${formatearFecha(registro.fechaVisita)}`, 10, y);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-
-      if (registro.motivo)       doc.text(`Motivo: ${registro.motivo}`, 15, y + 8);
-      if (registro.veterinario)  doc.text(`Veterinario: ${registro.veterinario}`, 15, y + 15);
-      if (registro.diagnostico)  doc.text(`Diagnóstico: ${registro.diagnostico}`, 15, y + 22);
-      if (registro.tratamiento)  doc.text(`Tratamiento: ${registro.tratamiento}`, 15, y + 29);
-      if (registro.medicamentos) doc.text(`Medicamentos: ${registro.medicamentos}`, 15, y + 36);
-      if (registro.notas)        doc.text(`Notas: ${registro.notas}`, 15, y + 43);
-
-      y += 55;
-
-      if (y > 270) {
-        doc.addPage();
-        this.agregarEncabezado(doc, titulo);
-        y = 30;
-      }
-    });
-
-    doc.save('historial_medico.pdf');
-  }
-
-  exportarVacunas(vacunas: any[], nombreMascota: string, formatearFechaHora: (fecha: any) => string) {
-    if (vacunas.length === 0) {
-      alert('No hay vacunas para exportar.');
-      return;
-    }
-
-    const doc = new jsPDF();
-    const titulo = `Historial de Vacunas de ${nombreMascota || 'Mascota'}`;
-    this.agregarEncabezado(doc, titulo);
-
-    let y = 30;
-
-    vacunas.forEach(vacuna => {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(10, 45, 105);
-      doc.text(`• ${vacuna.nombre || 'Vacuna sin nombre'}`, 10, y);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`Fecha: ${formatearFechaHora(vacuna.fechayhora) || 'N/A'}`, 15, y + 8);
-      doc.text(`Estado: ${vacuna.estado || 'pendiente'}`, 15, y + 15);
-
-      y += 30;
-
-      if (y > 270) {
-        doc.addPage();
-        this.agregarEncabezado(doc, titulo);
-        y = 30;
-      }
-    });
-
-    doc.save('historial_vacunas.pdf');
-  }
-
-  exportarDesparasitaciones(desparasitaciones: any[], nombreMascota: string, formatearFechaHora: (fecha: any) => string) {
-    if (desparasitaciones.length === 0) {
-      alert('No hay registros de desparasitación para exportar.');
-      return;
-    }
-
-    const doc = new jsPDF();
-    const titulo = `Historial de Desparasitación de ${nombreMascota || 'Mascota'}`;
-    this.agregarEncabezado(doc, titulo);
-
-    let y = 30;
-
-    desparasitaciones.forEach(d => {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(10, 45, 105);
-      doc.text(`• ${d.nombre || 'Desparasitación sin nombre'}`, 10, y);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`Fecha: ${formatearFechaHora(d.fechayhora) || 'N/A'}`, 15, y + 8);
-      doc.text(`Estado: ${d.estado || 'pendiente'}`, 15, y + 15);
-
-      y += 30;
-
-      if (y > 270) {
-        doc.addPage();
-        this.agregarEncabezado(doc, titulo);
-        y = 30;
-      }
-    });
-
-    doc.save('historial_desparasitacion.pdf');
+  private capitalize(text?: string): string {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
   private agregarEncabezado(doc: jsPDF, titulo: string) {
@@ -142,152 +35,221 @@ export class ExportarpdfService {
     doc.line(10, 18, 200, 18);
   }
 
-  exportarControles(controles: any[], nombreMascota: string, formatearFecha: (fecha: string) => string) {
-    if (controles.length === 0) {
-      alert('No hay registros de controles para exportar.');
-      return;
-    }
+  private async procesarPDF(doc: jsPDF, nombreArchivo: string, asuntoEmail: string) {
+    if (Capacitor.getPlatform() !== 'web') {
+      const pdfOutput = doc.output('datauristring');
+      const base64Data = pdfOutput.split(',')[1];
 
-    const doc = new jsPDF();
-    const titulo = `Historial de Control de Peso y Crecimiento de ${nombreMascota || 'Mascota'}`;
-    this.agregarEncabezado(doc, titulo);
+      const usuarioRaw = localStorage.getItem('usuarioLogin');
+      const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
 
-    let y = 30;
-
-    controles.forEach(control => {
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(10, 45, 105);
-      doc.text(`• Registro`, 10, y);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-
-      doc.text(`Peso: ${control.peso ?? 'N/A'} ${control.unidad ?? 'kg'}`, 15, y + 8);
-      doc.text(`Condición corporal: ${control.condicionCorporal ?? 'N/A'}`, 15, y + 15);
-      doc.text(`Actividad física: ${control.actividadFisica ?? 'N/A'}`, 15, y + 22);
-      doc.text(`Observaciones: ${control.observaciones ?? 'Ninguna'}`, 15, y + 29);
-      doc.text(`Fecha: ${formatearFecha(control.fecha) || 'N/A'}`, 15, y + 36);
-
-      y += 50;
-
-      if (y > 270) {
-        doc.addPage();
-        this.agregarEncabezado(doc, titulo);
-        y = 30;
+      if (!email) {
+        await Swal.fire({
+          icon: 'error',
+          title: 'Usuario no válido',
+          text: 'No se encontró el correo electrónico del usuario.',
+          confirmButtonText: 'OK',
+          heightAuto: false
+        });
+        return;
       }
-    });
 
-    doc.save('historial_controles.pdf');
-  }
+      const payload = { email, asunto: asuntoEmail, nombreArchivo, pdfBase64: base64Data };
 
-  async exportarAlimentacion(
-  alimentaciones: any[],
-  nombreMascota: string,
-  formatearFechaHora: (fecha: any) => string
-) {
-  if (!alimentaciones || alimentaciones.length === 0) {
-    Swal.fire({
-      icon: 'info',
-      title: 'Sin historial',
-      text: 'No hay registros de alimentación para exportar.',
-      confirmButtonText: 'OK',
-      heightAuto: false
-    });
-    return;
-  }
+      const loading = await this.loadingController.create({ message: 'Enviando PDF...', spinner: 'circles' });
+      await loading.present();
 
-  const doc = new jsPDF();
-  const titulo = `Historial de Alimentación de ${nombreMascota || 'Mascota'}`;
-  this.agregarEncabezado(doc, titulo);
-
-  let y = 30;
-
-  alimentaciones.forEach(a => {
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(13);
-    doc.setTextColor(10, 45, 105);
-    doc.text(`• ${a.tipoAlimento || 'Tipo no especificado'} - ${a.nombreAlimento || 'Nombre no especificado'}`, 10, y);
-
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-
-    doc.text(`Cantidad: ${a.cantidad || 'N/A'}`, 15, y + 8);
-    doc.text(`Método: ${a.metodo || 'N/A'}`, 15, y + 15);
-    doc.text(`¿Comió?: ${a.comio ? 'Sí' : 'No'}`, 15, y + 22);
-    doc.text(`Fecha y hora: ${formatearFechaHora(a.fechayhora || a.fecha) || 'N/A'}`, 15, y + 29);
-    doc.text(`Observaciones: ${a.obsAdicionales || 'Ninguna'}`, 15, y + 36);
-
-    y += 50;
-
-    if (y > 270) {
-      doc.addPage();
-      this.agregarEncabezado(doc, titulo);
-      y = 30;
+      this.http.post(`${environment.backendUrl}/enviar-pdf`, payload).subscribe({
+        next: async () => {
+          await loading.dismiss();
+          await Swal.fire({
+            icon: 'success',
+            title: '¡Enviado!',
+            text: '📧 PDF enviado correctamente por correo.',
+            confirmButtonText: 'OK',
+            heightAuto: false
+          });
+        },
+        error: async err => {
+          console.error('Error al enviar PDF:', err);
+          await loading.dismiss();
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo enviar el PDF por correo.',
+            confirmButtonText: 'OK',
+            heightAuto: false
+          });
+        }
+      });
+    } else {
+      doc.save(nombreArchivo);
     }
-  });
+  }
 
-  const nombreArchivo = 'historial_alimentacion.pdf';
-
-  if (Capacitor.getPlatform() !== 'web') {
-    const pdfOutput = doc.output('datauristring');
-    const base64Data = pdfOutput.split(',')[1];
-
-    const usuarioRaw = localStorage.getItem('usuarioLogin');
-    const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
-
-    if (!email) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Usuario no válido',
-        text: 'No se encontró el correo electrónico del usuario.',
+  private async exportarPDFGenerico<T>(
+    datos: T[],
+    nombreMascota: string,
+    tituloBase: string,
+    nombreArchivo: string,
+    dibujarRegistro: (doc: jsPDF, registro: T, y: number, formatearFecha?: (fecha: any) => string) => number,
+    formatearFecha?: (fecha: any) => string
+  ) {
+    if (!datos || datos.length === 0) {
+      await Swal.fire({
+        icon: 'info',
+        title: 'Sin historial',
+        text: `No hay registros para exportar.`,
         confirmButtonText: 'OK',
         heightAuto: false
       });
       return;
     }
 
-    const payload = {
-      email,
-      asunto: `Historial de alimentación de ${nombreMascota || 'Mascota'}`,
-      nombreArchivo,
-      pdfBase64: base64Data,
-    };
+    const doc = new jsPDF();
+    const titulo = `${tituloBase} de ${nombreMascota || 'Mascota'}`;
+    this.agregarEncabezado(doc, titulo);
 
-    const loading = await this.loadingController.create({
-      message: 'Enviando PDF...',
-      spinner: 'circles'
-    });
-    await loading.present();
-
-    this.http.post(`${environment.backendUrl}/enviar-pdf`, payload).subscribe({
-      next: async () => {
-        await loading.dismiss();
-        Swal.fire({
-          icon: 'success',
-          title: '¡Enviado!',
-          text: '📧 PDF enviado correctamente por correo.',
-          confirmButtonText: 'OK',
-          heightAuto: false
-        });
-      },
-      error: async err => {
-        console.error('❌ Error al enviar PDF:', err);
-        await loading.dismiss();
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudo enviar el PDF por correo.',
-          confirmButtonText: 'OK',
-          heightAuto: false
-        });
+    let y = 30;
+    for (const registro of datos) {
+      y = dibujarRegistro(doc, registro, y, formatearFecha);
+      if (y > 270) {
+        doc.addPage();
+        this.agregarEncabezado(doc, titulo);
+        y = 30;
       }
-    });
+    }
 
-  } else {
-    doc.save(nombreArchivo); // Web
+    await this.procesarPDF(doc, nombreArchivo, titulo);
   }
-}
+
+  exportarHistorialMedico(registros: any[], nombreMascota: string, formatearFecha: (fecha: any) => string) {
+    return this.exportarPDFGenerico(
+      registros,
+      nombreMascota,
+      'Historial Médico',
+      'historial_medico.pdf',
+      (doc, r, y, ff) => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.setTextColor(10, 45, 105);
+        doc.text(`• Visita: ${ff ? ff(r.fechaVisita) : r.fechaVisita}`, 10, y);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        if (r.motivo)       doc.text(`Motivo: ${this.capitalize(r.motivo)}`, 15, y + 8);
+        if (r.veterinario)  doc.text(`Veterinario: ${this.capitalize(r.veterinario)}`, 15, y + 15);
+        if (r.diagnostico)  doc.text(`Diagnóstico: ${this.capitalize(r.diagnostico)}`, 15, y + 22);
+        if (r.tratamiento)  doc.text(`Tratamiento: ${this.capitalize(r.tratamiento)}`, 15, y + 29);
+        if (r.medicamentos) doc.text(`Medicamentos: ${this.capitalize(r.medicamentos)}`, 15, y + 36);
+        if (r.notas)        doc.text(`Notas: ${this.capitalize(r.notas)}`, 15, y + 43);
+
+        return y + 55;
+      },
+      formatearFecha
+    );
+  }
+
+  exportarVacunas(vacunas: any[], nombreMascota: string, formatearFechaHora: (fecha: any) => string) {
+    return this.exportarPDFGenerico(
+      vacunas,
+      nombreMascota,
+      'Historial de Vacunas',
+      'historial_vacunas.pdf',
+      (doc, v, y, ff) => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.setTextColor(10, 45, 105);
+        doc.text(`• ${this.capitalize(v.nombre) || 'Vacuna sin nombre'}`, 10, y);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Fecha: ${ff ? ff(v.fechayhora) : v.fechayhora || 'N/A'}`, 15, y + 8);
+        doc.text(`Estado: ${this.capitalize(v.estado) || 'Pendiente'}`, 15, y + 15);
+
+        return y + 30;
+      },
+      formatearFechaHora
+    );
+  }
+
+  exportarDesparasitaciones(desparasitaciones: any[], nombreMascota: string, formatearFechaHora: (fecha: any) => string) {
+    return this.exportarPDFGenerico(
+      desparasitaciones,
+      nombreMascota,
+      'Historial de Desparasitación',
+      'historial_desparasitacion.pdf',
+      (doc, d, y, ff) => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.setTextColor(10, 45, 105);
+        doc.text(`• ${this.capitalize(d.nombre) || 'Desparasitación sin nombre'}`, 10, y);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Fecha: ${ff ? ff(d.fechayhora) : d.fechayhora || 'N/A'}`, 15, y + 8);
+        doc.text(`Estado: ${this.capitalize(d.estado) || 'Pendiente'}`, 15, y + 15);
+
+        return y + 30;
+      },
+      formatearFechaHora
+    );
+  }
+
+  exportarControles(controles: any[], nombreMascota: string, formatearFecha: (fecha: string) => string) {
+    return this.exportarPDFGenerico(
+      controles,
+      nombreMascota,
+      'Historial de Control de Peso y Crecimiento',
+      'historial_controles.pdf',
+      (doc, c, y, ff) => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.setTextColor(10, 45, 105);
+        doc.text(`• Registro`, 10, y);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Peso: ${c.peso ?? 'N/A'} ${this.capitalize(c.unidad) || 'kg'}`, 15, y + 8);
+        doc.text(`Condición corporal: ${this.capitalize(c.condicionCorporal) || 'N/A'}`, 15, y + 15);
+        doc.text(`Actividad física: ${this.capitalize(c.actividadFisica) || 'N/A'}`, 15, y + 22);
+        doc.text(`Observaciones: ${this.capitalize(c.observaciones) || 'Ninguna'}`, 15, y + 29);
+        doc.text(`Fecha: ${ff ? ff(c.fecha) : c.fecha || 'N/A'}`, 15, y + 36);
+
+        return y + 50;
+      },
+      formatearFecha
+    );
+  }
+
+  exportarAlimentacion(alimentaciones: any[], nombreMascota: string, formatearFechaHora: (fecha: any) => string) {
+    return this.exportarPDFGenerico(
+      alimentaciones,
+      nombreMascota,
+      'Historial de Alimentación',
+      'historial_alimentacion.pdf',
+      (doc, a, y, ff) => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13);
+        doc.setTextColor(10, 45, 105);
+        doc.text(`• ${this.capitalize(a.tipoAlimento) || 'Tipo no especificado'} - ${this.capitalize(a.nombreAlimento) || 'Nombre no especificado'}`, 10, y);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Cantidad: ${a.cantidad || 'N/A'}`, 15, y + 8);
+        doc.text(`Método: ${this.capitalize(a.metodo) || 'N/A'}`, 15, y + 15);
+        doc.text(`¿Comió?: ${a.comio ? 'Sí' : 'No'}`, 15, y + 22);
+        doc.text(`Fecha y hora: ${ff ? ff(a.fechayhora || a.fecha) : (a.fechayhora || a.fecha) || 'N/A'}`, 15, y + 29);
+        doc.text(`Observaciones: ${this.capitalize(a.obsAdicionales) || 'Ninguna'}`, 15, y + 36);
+
+        return y + 50;
+      },
+      formatearFechaHora
+    );
+  }
 }

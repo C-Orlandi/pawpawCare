@@ -1,0 +1,15 @@
+.item-toggle .label-toggle::before {
+  content: '— ';
+  color: var(--ion-color-medium);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.error-text {
+  color: #d9534f;
+  font-size: 0.75rem;
+  margin-left: 14px;
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}

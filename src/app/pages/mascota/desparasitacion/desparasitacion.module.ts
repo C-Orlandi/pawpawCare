@@ -8,6 +8,7 @@ import { DesparasitacionPageRoutingModule } from './desparasitacion-routing.modu
 
 import { DesparasitacionPage } from './desparasitacion.page';
 import { ModalDesparasitacionComponent } from 'src/app/components/modal-desparasitacion/modal-desparasitacion.component';
+import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ModalDesparasitacionComponent } from 'src/app/components/modal-desparas
     ReactiveFormsModule,
     DesparasitacionPageRoutingModule
   ],
-  declarations: [DesparasitacionPage, ModalDesparasitacionComponent]
+  declarations: [DesparasitacionPage, ModalDesparasitacionComponent, CapitalizarPipe]
 })
 export class DesparasitacionPageModule {}

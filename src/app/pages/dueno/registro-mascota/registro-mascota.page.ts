@@ -32,14 +32,15 @@ import { environment } from 'src/environments/environment';
       private route: ActivatedRoute
     ) {
       this.mascotaForm = this.fb.group({
-        nombre: ['', [Validators.required, Validators.minLength(2)]],
-        tipo: ['', [Validators.required, Validators.minLength(2)]],
-        raza: ['', [Validators.required, Validators.minLength(2)]],
+        usuarioUid: ['', Validators.required],
+        nombre: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+        tipo: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+        raza: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
         sexo: ['', Validators.required],
         fechaNacimiento: ['', Validators.required],
-        color: ['', [Validators.required, Validators.minLength(3)]],
-        chip: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-        peso: [null, [Validators.required, Validators.pattern('^[0-9]+(\\.[0-9]{1,2})?$')]],
+        color: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
+        chip: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+        peso: ['', Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)], // opcional, acepta decimales
         categoria: ['', Validators.required],
         tieneVacunas: [false]
       });

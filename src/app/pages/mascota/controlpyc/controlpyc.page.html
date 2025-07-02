@@ -1,10 +1,14 @@
 <ion-header>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Control de Peso y Crecimiento</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="exportarPDF()">
         <ion-icon name="download-outline" slot="start"></ion-icon>
-        Exportar PDF
       </ion-button>
       <ion-button (click)="abrirModalControl()">
         <ion-icon name="add" slot="icon-only"></ion-icon>
@@ -25,7 +29,7 @@
       <ion-label>
         <h2 class="titulo">{{ item.peso }} kg</h2>
         <p>📅 {{ formatearFechaHora(item.fecha) }}</p>
-        <p *ngIf="item.observaciones">{{ item.observaciones }}</p>
+        <p *ngIf="item.observaciones">{{ item.observaciones | capitalizar }}</p>
       </ion-label>
 
       <ion-button

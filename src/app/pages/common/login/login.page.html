@@ -28,9 +28,27 @@
       El correo es invalido
     </ion-text>
 
-    <ion-item>
-      <ion-input formControlName="pass" type="password" label="Contraseña:" labelPlacement="floating" placeholder="Enter text"></ion-input>
-    </ion-item>
+    <ion-item class="password-item">
+    <ion-input
+      formControlName="pass"
+      [type]="verPassword ? 'text' : 'password'"
+      label="Contraseña:"
+      labelPlacement="floating"
+      placeholder="Ingrese su contraseña">
+    </ion-input>
+
+    <ion-button
+      fill="clear"
+      slot="end"
+      size="small"
+      (click)="togglePassword()"
+      class="eye-button">
+      <ion-icon
+        [name]="verPassword ? 'eye-off-outline' : 'eye-outline'"
+        slot="icon-only">
+      </ion-icon>
+    </ion-button>
+  </ion-item>
 
     <ion-text position="stacked" color="danger" *ngIf="loginForm.get('pass')?.hasError('required')">
       La contraseña es obligatoria

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="tertiary">
+  <ion-toolbar>
     <ion-title>{{ modoEdicion ? 'Editar Mascota' : 'Registrar Mascota' }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="cerrar()">Cerrar</ion-button>
@@ -17,26 +17,48 @@
           <ion-label position="floating">Nombre <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="nombre"></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="mascotaForm.get('nombre')?.invalid && mascotaForm.get('nombre')?.touched">
-          <small>Este campo es obligatorio y debe tener al menos 2 caracteres.</small>
+        <ion-text color="danger" *ngIf="mascotaForm.get('nombre')?.touched">
+          <ng-container *ngIf="mascotaForm.get('nombre')?.hasError('required')">
+            <small>El nombre es obligatorio.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('nombre')?.hasError('minlength')">
+            <small>Debe tener al menos 2 caracteres.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('nombre')?.hasError('pattern')">
+            <small>Solo se permiten letras y espacios.</small>
+          </ng-container>
         </ion-text>
-
 
         <ion-item lines="inset">
           <ion-label position="floating">Especie <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="tipo"></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="mascotaForm.get('tipo')?.invalid && mascotaForm.get('tipo')?.touched">
-          <small>Este campo es obligatorio y debe tener al menos 2 caracteres.</small>
+        <ion-text color="danger" *ngIf="mascotaForm.get('tipo')?.touched">
+          <ng-container *ngIf="mascotaForm.get('tipo')?.hasError('required')">
+            <small>La especie es obligatoria.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('tipo')?.hasError('minlength')">
+            <small>Debe tener al menos 2 caracteres.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('tipo')?.hasError('pattern')">
+            <small>Solo se permiten letras y espacios.</small>
+          </ng-container>
         </ion-text>
-        
 
         <ion-item lines="inset">
           <ion-label position="floating">Raza <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="raza"></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="mascotaForm.get('raza')?.invalid && mascotaForm.get('raza')?.touched">
-          <small>Este campo es obligatorio y debe tener al menos 2 caracteres.</small>
+        <ion-text color="danger" *ngIf="mascotaForm.get('raza')?.touched">
+          <ng-container *ngIf="mascotaForm.get('raza')?.hasError('required')">
+            <small>La raza es obligatoria.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('raza')?.hasError('minlength')">
+            <small>Debe tener al menos 2 caracteres.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('raza')?.hasError('pattern')">
+            <small>Solo se permiten letras y espacios.</small>
+          </ng-container>
         </ion-text>
 
         <ion-item lines="inset">
@@ -46,8 +68,8 @@
             <ion-select-option value="Hembra">Hembra</ion-select-option>
           </ion-select>
         </ion-item>
-        <ion-text color="danger" *ngIf="mascotaForm.get('sexo')?.invalid && mascotaForm.get('sexo')?.touched">
-          <small>Este camopo es obligatorio.</small>
+        <ion-text color="danger" *ngIf="mascotaForm.get('sexo')?.touched && mascotaForm.get('sexo')?.hasError('required')">
+          <small>Este campo es obligatorio.</small>
         </ion-text>
 
         <ion-item lines="inset">
@@ -67,17 +89,29 @@
           <ion-label position="floating">Color <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="color"></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="mascotaForm.get('color')?.invalid && mascotaForm.get('color')?.touched">
-          <small>Este camopo es obligatorio y debe tener al menos 3 caracteres..</small>
+        <ion-text color="danger" *ngIf="mascotaForm.get('color')?.touched">
+          <ng-container *ngIf="mascotaForm.get('color')?.hasError('required')">
+            <small>El color es obligatorio.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('color')?.hasError('minlength')">
+            <small>Debe tener al menos 3 caracteres.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('color')?.hasError('pattern')">
+            <small>Solo se permiten letras y espacios.</small>
+          </ng-container>
         </ion-text>
-      
 
         <ion-item lines="inset">
           <ion-label position="floating">Número de chip / identificación <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="chip"></ion-input>
         </ion-item>
-        <ion-text color="danger" *ngIf="mascotaForm.get('chip')?.invalid && mascotaForm.get('chip')?.touched">
-          <small>Este camopo es obligatorio y solo permite numeros</small>
+        <ion-text color="danger" *ngIf="mascotaForm.get('chip')?.touched">
+          <ng-container *ngIf="mascotaForm.get('chip')?.hasError('required')">
+            <small>Este campo es obligatorio.</small>
+          </ng-container>
+          <ng-container *ngIf="mascotaForm.get('chip')?.hasError('pattern')">
+            <small>Solo se permiten números.</small>
+          </ng-container>
         </ion-text>
       
         <ion-item lines="inset">

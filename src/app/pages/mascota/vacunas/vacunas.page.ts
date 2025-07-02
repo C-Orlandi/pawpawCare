@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { VacunaService } from 'src/app/services/vacuna.service';
 import { ModalVacunaComponent } from 'src/app/components/modal-vacuna/modal-vacuna.component';
@@ -22,7 +22,8 @@ export class VacunasPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private exportarpdf: ExportarpdfService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -124,6 +125,10 @@ export class VacunasPage implements OnInit {
     }
 
     this.exportarpdf.exportarVacunas(this.vacunas, this.mascotaSeleccionada?.nombre, this.formatearFechaHora);
+  }
+
+  goBack() {
+  this.navCtrl.back();
   }
 
 }

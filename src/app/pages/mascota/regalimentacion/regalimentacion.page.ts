@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { ModalAlimentacionComponent } from 'src/app/components/modal-alimentacion/modal-alimentacion.component';
 import { AlimentacionService } from 'src/app/services/alimentacion.service';
 import { ExportarpdfService } from 'src/app/services/exportarpdf.service';
 import Swal from 'sweetalert2';
-import { LoadingController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-regalimentacion',
@@ -22,7 +21,8 @@ export class RegalimentacionPage implements OnInit {
     private modalController: ModalController,
     private alertController: AlertController,
     private exportarpdf: ExportarpdfService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -125,6 +125,10 @@ export class RegalimentacionPage implements OnInit {
       this.mascotaSeleccionada?.nombre,
       this.formatearFechaHora
     );
+  }
+
+  goBack() {
+  this.navCtrl.back();
   }
 
 }

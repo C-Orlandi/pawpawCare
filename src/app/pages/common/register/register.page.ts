@@ -15,6 +15,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class RegisterPage implements OnInit {
 
   registerForm: FormGroup;
+  verPassword: boolean = false;
 
   constructor(
     private router: Router,
@@ -36,6 +37,10 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
     this.menuController.enable(false);
   }
+
+  togglePassword() {
+  this.verPassword = !this.verPassword;
+}
 
   async registrarse() {
     if (this.registerForm.invalid) {
