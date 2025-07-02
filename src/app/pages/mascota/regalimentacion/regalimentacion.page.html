@@ -26,12 +26,12 @@
       (click)="abrirModalAlimentacion(item)"
     >
       <ion-label>
-        <h2>{{ item.tipoAlimento | capitalizar }} - {{ item.nombreAlimento | capitalizar }}</h2>
+        <h2>{{ item.tipoAlimento }} - {{ item.nombreAlimento }}</h2>
         <p>📅 {{ formatearFechaHora(item.fecha ) }}</p>
         <p><strong>Cantidad:</strong> {{ item.cantidad }}</p>
-        <p><strong>Método:</strong> {{ item.metodo | capitalizar }}</p>
+        <p><strong>Método:</strong> {{ item.metodo}}</p>
         <p><strong>¿Comió?:</strong> {{ item.comio ? 'Sí' : 'No' }}</p>
-        <p><strong>Observaciones:</strong> {{ item.obsAdicionales || 'Ninguna' | capitalizar }}</p>
+        <p><strong>Observaciones:</strong> {{ item.obsAdicionales || 'Ninguna' }}</p>
       </ion-label>
       <ion-button
         fill="clear"

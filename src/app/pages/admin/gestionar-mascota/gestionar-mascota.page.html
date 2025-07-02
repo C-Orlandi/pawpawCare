@@ -18,9 +18,9 @@
   <ion-list>
     <ion-item *ngFor="let mascota of mascotas">
     <ion-label>
-      <h2>{{ mascota.nombre | capitalizar }}</h2>
-      <p>Tipo: {{ mascota.tipo | capitalizar }}</p>
-      <p>Dueño: {{ mascota.nombreDueno | capitalizar}}</p>
+      <h2>{{ mascota.nombre }}</h2>
+      <p>Tipo: {{ mascota.tipo }}</p>
+      <p>Dueño: {{ mascota.nombreDueno }}</p>
     </ion-label>
 
       <ion-button color="warning" fill="clear" (click)="abrirModal(mascota)">

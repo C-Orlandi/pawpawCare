@@ -8,7 +8,6 @@ import { GestionarMascotaPageRoutingModule } from './gestionar-mascota-routing.m
 
 import { GestionarMascotaPage } from './gestionar-mascota.page';
 import { ModalMascotaComponent } from 'src/app/components/modal-mascota/modal-mascota.component';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @NgModule({
   imports: [

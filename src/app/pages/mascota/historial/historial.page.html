@@ -26,13 +26,13 @@
       (click)="editarRegistro(registro)"
     >
       <ion-label>
-        <h2>{{ formatearFecha(registro.fechaVisita | capitalizar ) }}</h2>
-        <p><strong>Motivo:</strong> {{ registro.motivo | capitalizar }}</p>
-        <p *ngIf="registro.veterinario"><strong>Veterinario:</strong> {{ registro.veterinario | capitalizar }}</p>
-        <p *ngIf="registro.diagnostico"><strong>Diagnóstico:</strong> {{ registro.diagnostico | capitalizar }}</p>
-        <p *ngIf="registro.tratamiento"><strong>Tratamiento:</strong> {{ registro.tratamiento | capitalizar }}</p>
-        <p *ngIf="registro.medicamentos"><strong>Medicamentos:</strong> {{ registro.medicamentos | capitalizar }}</p>
-        <p *ngIf="registro.notas"><strong>Notas:</strong> {{ registro.notas | capitalizar }}</p>
+        <h2>{{ formatearFecha(registro.fechaVisita ) }}</h2>
+        <p><strong>Motivo:</strong> {{ registro.motivo }}</p>
+        <p *ngIf="registro.veterinario"><strong>Veterinario:</strong> {{ registro.veterinario }}</p>
+        <p *ngIf="registro.diagnostico"><strong>Diagnóstico:</strong> {{ registro.diagnostico }}</p>
+        <p *ngIf="registro.tratamiento"><strong>Tratamiento:</strong> {{ registro.tratamiento }}</p>
+        <p *ngIf="registro.medicamentos"><strong>Medicamentos:</strong> {{ registro.medicamentos }}</p>
+        <p *ngIf="registro.notas"><strong>Notas:</strong> {{ registro.notas }}</p>
       </ion-label>
 
       <ion-button

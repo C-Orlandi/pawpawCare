@@ -8,8 +8,6 @@ import { DesparasitacionPageRoutingModule } from './desparasitacion-routing.modu
 
 import { DesparasitacionPage } from './desparasitacion.page';
 import { ModalDesparasitacionComponent } from 'src/app/components/modal-desparasitacion/modal-desparasitacion.component';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   imports: [

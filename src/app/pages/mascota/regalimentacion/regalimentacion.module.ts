@@ -9,9 +9,6 @@ import { RegalimentacionPageRoutingModule } from './regalimentacion-routing.modu
 import { RegalimentacionPage } from './regalimentacion.page';
 import { ModalAlimentacionComponent } from 'src/app/components/modal-alimentacion/modal-alimentacion.component';
 
-import { SharedModule } from 'src/app/modules/shared/shared.module';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
-
 @NgModule({
   imports: [
     CommonModule,

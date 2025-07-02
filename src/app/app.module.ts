@@ -1,4 +1,4 @@
-  import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -12,11 +12,10 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
-import { CapitalizarPipe } from './pipes/capitalizar.pipe';
 
 
 @NgModule({
-  declarations: [AppComponent, CapitalizarPipe],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -24,9 +23,6 @@ import { CapitalizarPipe } from './pipes/capitalizar.pipe';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     HttpClientModule
-  ],
-  exports: [
-    CapitalizarPipe 
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

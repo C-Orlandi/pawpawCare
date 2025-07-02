@@ -18,7 +18,7 @@
   <ion-list *ngIf="recordatorios; else cargando">
     <ion-item *ngFor="let rec of recordatorios" lines="inset" button (click)="abrirModalRecordatorio(rec)">
       <ion-label>
-        <h2>{{ rec.nombreMascota || 'Mascota desconocida' | capitalizar }}</h2>
+        <h2>{{ rec.nombreMascota || 'Mascota desconocida' }}</h2>
         <p>Tipo: {{ rec.tipo }}</p>
 
         <ng-container *ngIf="rec.tipo === 'vacuna' || rec.tipo === 'desparasitacion'">
@@ -28,7 +28,7 @@
         </ng-container>
 
         <ng-container *ngIf="rec.tipo === 'medicamento'">
-          <p>Medicamento: {{ rec.nombre | capitalizar }}</p>
+          <p>Medicamento: {{ rec.nombre }}</p>
           <p>Fecha: {{ formatearFechaHora(rec.horaInicio) }}</p>
           <p>Dosis: {{ rec.dosis }} x {{ rec.duracion }} días cada {{ rec.frecuenciaHoras }} horas</p>
           <p [class.text-red]="rec.estado === 'activo'">Estado: {{ rec.estado }}</p>

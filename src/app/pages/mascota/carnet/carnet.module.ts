@@ -7,8 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { CarnetPageRoutingModule } from './carnet-routing.module';
 
 import { CarnetPage } from './carnet.page';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   imports: [

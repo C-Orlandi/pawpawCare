@@ -8,8 +8,6 @@ import { RecordatoriosPageRoutingModule } from './recordatorios-routing.module';
 
 import { RecordatoriosPage } from './recordatorios.page';
 import { ModalRecordatorioComponent } from 'src/app/components/modal-recordatorio/modal-recordatorio.component';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   imports: [

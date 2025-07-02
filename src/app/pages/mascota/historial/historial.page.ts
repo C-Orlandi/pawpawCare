@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { ModalRmedicoComponent } from 'src/app/components/modal-rmedico/modal-rmedico.component';
 import { ExportarpdfService } from 'src/app/services/exportarpdf.service';
 import Swal from 'sweetalert2';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
 
 @Component({
   selector: 'app-historial',

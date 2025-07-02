@@ -8,8 +8,6 @@ import { VacunasPageRoutingModule } from './vacunas-routing.module';
 
 import { VacunasPage } from './vacunas.page';
 import { ModalVacunaComponent } from 'src/app/components/modal-vacuna/modal-vacuna.component';
-import { CapitalizarPipe } from 'src/app/pipes/capitalizar.pipe';
-import { SharedModule } from 'src/app/modules/shared/shared.module';
 
 @NgModule({
   imports: [
