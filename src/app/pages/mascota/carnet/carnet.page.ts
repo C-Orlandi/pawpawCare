@@ -17,13 +17,25 @@ export class CarnetPage implements OnInit {
 
   constructor(private http: HttpClient, private loadingController: LoadingController, private navCtrl: NavController) {}
   
-  ngOnInit() {
+  async ngOnInit() {
     const data = localStorage.getItem('mascotaSeleccionada');
     if (data) {
       this.mascota = JSON.parse(data);
+
+      // ⬇️ Aquí cargamos la imagen base64 desde Firebase y la asignamos para mostrarla
+      if (this.mascota.imagenPath) {
+        const base64 = await this.loadImageViaDOM();
+        if (base64) {
+          this.mascota.imagenBase64 = base64;
+        } else {
+          this.mascota.imagenBase64 = 'assets/mascotas/default.jpg';
+        }
+      } else {
+        this.mascota.imagenBase64 = 'assets/mascotas/default.jpg';
+      }
     }
   }
-  
+
   async exportarCarnet() {
     const loading = await this.loadingController.create({
       message: 'Generando carnet...',

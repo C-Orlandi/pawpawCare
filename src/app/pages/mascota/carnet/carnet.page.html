@@ -17,7 +17,7 @@
 <ion-content class="ion-padding">
  <div id="carnetPDF">
   <ion-card class="carnet-card">
-    <img [src]="mascota?.imagen || 'assets/mascotas/default.jpg'" alt="Foto de mascota" class="foto-carnet" />
+    <img [src]="mascota?.imagenBase64" alt="Foto de mascota" class="foto-carnet" />
 
     <ion-card-header>
       <ion-card-title>{{ mascota?.nombre }}</ion-card-title>

@@ -32,7 +32,6 @@ import { environment } from 'src/environments/environment';
       private route: ActivatedRoute
     ) {
       this.mascotaForm = this.fb.group({
-        usuarioUid: ['', Validators.required],
         nombre: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
         tipo: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
         raza: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
@@ -133,20 +132,16 @@ import { environment } from 'src/environments/environment';
         const mid = this.modoEdicion && this.midExistente ? this.midExistente : uuidv4();
 
         let urlImagen = this.imagenAnterior || '';
-        let pathImagen = ''; // ✅ agregar esta línea
-
+        let imagenPath = this.mascotaForm.value.imagenPath || '';
         if (this.imagenFile) {
           const formData = new FormData();
           formData.append('foto', this.imagenFile);
-          formData.append('mid', mid); // ✅ muy importante
-
-          const uploadResponse: any = await this.http
-            .post(`${environment.backendUrl.replace('/api', '')}/upload`, formData)
-            .toPromise();
+          const uploadResponse: any = await this.http.post(`${environment.backendUrl.replace('/api', '')}/upload`, formData).toPromise();
 
           urlImagen = uploadResponse.url;
-          pathImagen = uploadResponse.path; // ✅ capturar path
+          imagenPath = uploadResponse.path; // <- GUARDA EL PATH DE FIREBASE
         }
+
 
         // Obtener usuario actualizado desde Firestore
         const usuarioDoc = await this.firestore.doc<{ nombre?: string; contacto?: string }>(`usuarios/${this.usuarioLogin?.uid}`).get().toPromise();
@@ -160,7 +155,7 @@ import { environment } from 'src/environments/environment';
           ...data,
           edad: edadCalculada,
           imagen: urlImagen,
-          imagenPath: pathImagen || '', 
+          imagenPath,
           usuarioUid: this.usuarioLogin?.uid || 'desconocido',
           dueno: {
             nombre: duenoNombre,

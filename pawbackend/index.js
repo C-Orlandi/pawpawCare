@@ -1,3 +1,4 @@
+//index
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
@@ -84,7 +85,7 @@ app.post('/upload', upload.single('foto'), async (req, res) => {
     });
 
     console.log('✅ Imagen subida con éxito:', url);
-    res.status(200).json({ url });
+    res.status(200).json({ url, path: destino });
   } catch (error) {
     console.error('🔥 Error al subir archivo:', error);
     res.status(500).send('Error al subir el archivo.');
