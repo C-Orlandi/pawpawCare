@@ -1,13 +1,12 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { AlertController, IonicModule } from '@ionic/angular';
-import { Geolocation, PermissionStatus } from '@capacitor/geolocation';
+import { Geolocation } from '@capacitor/geolocation';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { Route, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-geolocalizacion',
@@ -46,49 +45,23 @@ export class GeolocalizacionPage implements OnInit {
     await this.obtenerUbicacion();
   }
 
-  ionViewWillEnter() {
-    this.obtenerUbicacion();
-  }
-
   async obtenerUbicacion() {
-  const plataforma = Capacitor.getPlatform(); // 'web', 'android', 'ios'
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      this.userLat = position.coords.latitude;
+      this.userLng = position.coords.longitude;
+      this.center = { lat: this.userLat, lng: this.userLng };
+      this.userMarker.position = { lat: this.userLat, lng: this.userLng };
 
-  try {
-    // 🔐 Solo pedimos permisos en Android/iOS
-    if (plataforma !== 'web') {
-      const permiso = await Geolocation.requestPermissions({ permissions: ['location'] });
-
-      if (permiso.location !== 'granted') {
-        await this.mostrarAlerta('Permiso requerido', 'Debes permitir la ubicación para usar esta función.');
-        return;
-      }
+      this.crearOActualizarCirculo();
+    } catch (error) {
+      const alert = await this.alertCtrl.create({
+        header: 'Permiso requerido',
+        message: 'Debes permitir la ubicación para usar esta función.',
+        buttons: ['OK'],
+      });
+      await alert.present();
     }
-
-    // 🌐 En web el permiso se solicita automáticamente al obtener la ubicación
-    const position = await Geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 10000,
-    });
-
-    this.userLat = position.coords.latitude;
-    this.userLng = position.coords.longitude;
-    this.center = { lat: this.userLat, lng: this.userLng };
-    this.userMarker.position = { lat: this.userLat, lng: this.userLng };
-
-    this.crearOActualizarCirculo();
-  } catch (error) {
-    console.error('❌ Error al obtener ubicación:', error);
-    await this.mostrarAlerta('Error de ubicación', 'No se pudo obtener tu ubicación. Intenta nuevamente o revisa los permisos.');
-  }
-}
-
-  async mostrarAlerta(header: string, message: string) {
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: ['OK'],
-    });
-    await alert.present();
   }
 
   onRadioCambiar(event: any) {
