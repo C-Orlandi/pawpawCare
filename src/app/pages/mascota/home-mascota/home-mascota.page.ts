@@ -33,18 +33,18 @@ export class HomeMascotaPage {
     formData.append('foto', file);
 
     try {
-      // Opcional: muestra carga
       const uploadRes: any = await this.http.post(`${environment.backendUrl.replace('/api', '')}/upload`, formData).toPromise();
-
       const nuevaUrl = uploadRes.url;
 
-      // Actualizar en Firestore
       await this.firestore.collection('mascotas').doc(this.mascota.mid).update({
         imagen: nuevaUrl
       });
 
-      // Actualizar localmente
       this.mascota.imagen = nuevaUrl;
+
+      // Actualizar localStorage para que refleje cambio en home y mis-mascotas
+      localStorage.setItem('mascotaSeleccionada', JSON.stringify(this.mascota));
+
     } catch (error) {
       console.error('Error al actualizar imagen:', error);
     }

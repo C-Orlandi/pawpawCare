@@ -1,28 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import Swal from 'sweetalert2';
-import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { LoadingController, NavController } from '@ionic/angular';
+  import { Component, OnInit } from '@angular/core';
+  import jsPDF from 'jspdf';
+  import html2canvas from 'html2canvas';
+  import Swal from 'sweetalert2';
+  import { environment } from 'src/environments/environment';
+  import { HttpClient } from '@angular/common/http';
+  import { LoadingController, NavController } from '@ionic/angular';
+  import { AngularFirestore } from '@angular/fire/compat/firestore';
 
-@Component({
-  selector: 'app-carnet',
-  templateUrl: './carnet.page.html',
-  styleUrls: ['./carnet.page.scss']
-})
-export class CarnetPage implements OnInit {
-  
-  mascota: any;
+  @Component({
+    selector: 'app-carnet',
+    templateUrl: './carnet.page.html',
+    styleUrls: ['./carnet.page.scss']
+  })
+  export class CarnetPage implements OnInit {
+    
+    mascota: any;
+    imagenFile: File | null = null;
+    imagenPreview: string | null = null;
 
-  constructor(private http: HttpClient, private loadingController: LoadingController, private navCtrl: NavController) {}
-  
-  async ngOnInit() {
-    const data = localStorage.getItem('mascotaSeleccionada');
+    constructor(private http: HttpClient, private loadingController: LoadingController, private navCtrl: NavController, private firestore: AngularFirestore) {}
+    
+    async ngOnInit() {
+      const data = localStorage.getItem('mascotaSeleccionada');
     if (data) {
-      this.mascota = JSON.parse(data);
+      // ✅ Clonamos el objeto para que los cambios no afecten a localStorage
+      const originalMascota = JSON.parse(data);
+      this.mascota = JSON.parse(JSON.stringify(originalMascota));  // clon profundo
 
-      // ⬇️ Aquí cargamos la imagen base64 desde Firebase y la asignamos para mostrarla
       if (this.mascota.imagenPath) {
         const base64 = await this.loadImageViaDOM();
         if (base64) {
@@ -36,160 +40,250 @@ export class CarnetPage implements OnInit {
     }
   }
 
-  async exportarCarnet() {
-    const loading = await this.loadingController.create({
-      message: 'Generando carnet...',
-      spinner: 'circles'
-    });
-    await loading.present();
+    async exportarCarnet() {
+      const loading = await this.loadingController.create({
+        message: 'Generando carnet...',
+        spinner: 'circles'
+      });
+      await loading.present();
 
-    try {
-      const doc = new jsPDF('p', 'mm', 'a4');
+      try {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const ancho = doc.internal.pageSize.getWidth();
+        const alto = doc.internal.pageSize.getHeight();
 
-      const ancho = doc.internal.pageSize.getWidth();
-      let y = 20;
+        // 🟦 Configuración del carnet tipo tarjeta
+        const margenHorizontal = 20;
+        const carnetWidth = ancho - margenHorizontal * 2;
+        const carnetHeight = 160;
+        const xCarnet = margenHorizontal;
+        const yCarnet = 40;
 
-      // 1. Agrega título
-      doc.setFontSize(20);
-      doc.setTextColor(40, 40, 40);
-      doc.text('Carnet Digital de Mascota', ancho / 2, y, { align: 'center' });
-      y += 10;
+        // Fondo pastel moderno
+        doc.setFillColor(245, 250, 255); // azul muy claro
+        doc.roundedRect(xCarnet, yCarnet, carnetWidth, carnetHeight, 6, 6, 'F');
 
-      const imgBase64 = await this.loadImageViaDOM();
+        // Borde gris claro
+        doc.setDrawColor(220, 220, 220);
+        doc.roundedRect(xCarnet, yCarnet, carnetWidth, carnetHeight, 6, 6);
 
-      if (imgBase64) {
-        doc.addImage(imgBase64, 'JPEG', (ancho - 50) / 2, y, 50, 50);
-        y += 60;
-      } else {
-        console.warn('No se pudo cargar la imagen de la mascota, se omitirá en el PDF.');
-      }
+        // 🐾 Imagen circular centrada
+        const imgBase64 = await this.loadImageViaDOM();
+        if (imgBase64) {
+          const imgSize = 55;
+          const xImg = ancho / 2 - imgSize / 2;
+          const yImg = yCarnet + 10;
 
-      // 3. Agrega datos
-      doc.setFontSize(12);
-      const datos = [
-        ['Nombre', this.mascota?.nombre],
-        ['Especie', this.mascota?.tipo],
-        ['Raza', this.mascota?.raza],
-        ['Sexo', this.mascota?.sexo],
-        ['Color', this.mascota?.color],
-        ['N° Chip', this.mascota?.chip || 'No registrado'],
-        ['Dueño', this.mascota?.dueno?.nombre || 'No asignado'],
-        ['Contacto', this.mascota?.dueno?.contacto || 'Sin contacto'],
-      ];
+          // Círculo blanco de fondo (simulación de borde circular)
+          doc.setFillColor(255, 255, 255);
+          doc.circle(ancho / 2, yImg + imgSize / 2, imgSize / 2 + 2, 'F');
 
-      for (const [etiqueta, valor] of datos) {
+          doc.addImage(imgBase64, 'JPEG', xImg, yImg, imgSize, imgSize, undefined, 'FAST');
+        }
+
+        // 🐶 Nombre destacado
+        let yTexto = yCarnet + 75;
+        doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        doc.text(`${etiqueta}:`, 30, y);
+        doc.setTextColor(30, 30, 60);
+        doc.text(this.mascota?.nombre || 'Nombre no disponible', ancho / 2, yTexto, { align: 'center' });
+
+        // 🐕 Especie - Raza
+        yTexto += 9;
+        doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
-        doc.text(valor || 'N/A', 70, y);
-        y += 10;
-      }
+        doc.setTextColor(100, 100, 100);
+        doc.text(
+          `${this.mascota?.tipo || 'Desconocido'} - ${this.mascota?.raza || 'Sin raza'}`,
+          ancho / 2,
+          yTexto,
+          { align: 'center' }
+        );
 
-      const pdfOutput = doc.output('datauristring');
-      const base64Data = pdfOutput.split(',')[1];
-      const nombreArchivo = `carnet_${this.mascota?.nombre || 'mascota'}.pdf`;
+        // 🧾 Información detallada
+        yTexto += 15;
+        doc.setFontSize(11);
+        doc.setTextColor(60, 60, 60);
 
-      // 4. Enviar por correo
-      const usuarioRaw = localStorage.getItem('usuarioLogin');
-      const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
+        const datos = [
+          ['Sexo', this.mascota?.sexo || 'Desconocido'],
+          ['Color', this.mascota?.color || 'No especificado'],
+          ['N° Chip', this.mascota?.chip || 'No registrado'],
+          ['Dueño', this.mascota?.dueno?.nombre || 'No asignado'],
+          ['Contacto', this.mascota?.dueno?.contacto || 'Sin contacto']
+        ];
 
-      if (!email) {
+        for (const [label, valor] of datos) {
+          doc.text(`${label}: ${valor}`, ancho / 2, yTexto, { align: 'center' });
+          yTexto += 8;
+        }
+
+        // 🌐 Branding inferior
+        doc.setFontSize(10);
+        doc.setTextColor(180, 180, 180);
+        doc.text('PawCare - Gestión de Salud Animal', ancho / 2, yCarnet + carnetHeight - 10, { align: 'center' });
+
+        // 📤 Generar PDF y enviar por correo
+        const pdfOutput = doc.output('datauristring');
+        const base64Data = pdfOutput.split(',')[1];
+        const nombreArchivo = `carnet_${this.mascota?.nombre || 'mascota'}.pdf`;
+
+        const usuarioRaw = localStorage.getItem('usuarioLogin');
+        const email = usuarioRaw ? JSON.parse(usuarioRaw).email : null;
+
+        if (!email) {
+          await loading.dismiss();
+          await Swal.fire({
+            icon: 'error',
+            title: 'Correo no encontrado',
+            text: 'No se encontró el email del usuario.',
+            confirmButtonText: 'OK',
+            heightAuto: false
+          });
+          return;
+        }
+
+        const payload = {
+          email,
+          asunto: `Carnet de ${this.mascota?.nombre}`,
+          nombreArchivo,
+          pdfBase64: base64Data
+        };
+
+        this.http.post(`${environment.backendUrl}/enviar-pdf`, payload).subscribe({
+          next: async () => {
+            await loading.dismiss();
+            await Swal.fire({
+              icon: 'success',
+              title: '¡Carnet enviado!',
+              text: 'El carnet fue enviado correctamente por correo.',
+              confirmButtonText: 'OK',
+              heightAuto: false
+            });
+          },
+          error: async err => {
+            console.error('Error al enviar carnet:', err);
+            await loading.dismiss();
+            await Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo enviar el carnet por correo.',
+              confirmButtonText: 'OK',
+              heightAuto: false
+            });
+          }
+        });
+
+      } catch (err) {
+        console.error('Error generando PDF:', err);
         await loading.dismiss();
         await Swal.fire({
           icon: 'error',
-          title: 'Correo no encontrado',
-          text: 'No se encontró el email del usuario.',
-          confirmButtonText: 'OK'
+          title: 'Error',
+          text: 'No se pudo generar el PDF del carnet.',
+          confirmButtonText: 'OK',
+          heightAuto: false
         });
-        return;
       }
-
-      const payload = {
-        email,
-        asunto: `Carnet de ${this.mascota?.nombre}`,
-        nombreArchivo,
-        pdfBase64: base64Data
-      };
-
-      this.http.post(`${environment.backendUrl}/enviar-pdf`, payload).subscribe({
-        next: async () => {
-          await loading.dismiss();
-          Swal.fire({
-            icon: 'success',
-            title: '¡Carnet enviado!',
-            text: '📧 El carnet fue enviado correctamente por correo.',
-            confirmButtonText: 'OK'
-          });
-        },
-        error: async err => {
-          console.error('❌ Error al enviar carnet:', err);
-          await loading.dismiss();
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo enviar el carnet por correo.',
-            confirmButtonText: 'OK'
-          });
-        }
-      });
-
-    } catch (err) {
-      console.error('Error generando PDF:', err);
-      await loading.dismiss();
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'No se pudo generar el PDF del carnet.',
-        confirmButtonText: 'OK'
-      });
     }
-  }
 
-  private async loadImageAsBlob(url: string): Promise<Blob> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error('❌ Error HTTP al cargar imagen:', response.status, response.statusText);
-      throw new Error(`HTTP error! status: ${response.status}`);
+    private async loadImageViaDOM(): Promise<string | null> {
+      try {
+        const imagePath = this.mascota?.imagenPath || 'mascotas/default.jpg';
+
+        const response = await this.http
+          .get<{ base64: string }>(`${environment.backendUrl}/imagen-firebase?path=${encodeURIComponent(imagePath)}`)
+          .toPromise();
+
+        return response?.base64 || null;
+      } catch (err) {
+        console.error('❌ Error cargando imagen desde backend por path:', err);
+        return null;
+      }
     }
-    return await response.blob();
-  } catch (error) {
-    console.error('❌ Error cargando imagen desde Firebase Storage con fetch:', error);
-    throw error;
-  }
-}
 
-  private async blobToBase64(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = reject;
-      reader.onload = () => {
-        resolve(reader.result as string);
-      };
-      reader.readAsDataURL(blob);
-    }); 
-  }
+    onFileSelected(event: any) {
+      const file = event.target.files[0];
+      if (file) {
+        this.imagenFile = file;
+        const reader = new FileReader();
+        reader.onload = e => this.imagenPreview = (e.target as any).result;
+        reader.readAsDataURL(file);
+      }
+    }
 
-  private async loadImageViaDOM(): Promise<string | null> {
+    async guardarNuevaFoto() {
+    if (!this.imagenFile) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Selecciona una imagen',
+        text: 'Por favor, elige primero una foto.',
+        confirmButtonText: 'OK',
+        heightAuto: false
+      });
+      return;
+    }
+
+    const loading = await this.loadingController.create({ message: 'Subiendo foto...' });
+    await loading.present();
+
     try {
-      const imagePath = this.mascota?.imagenPath || 'mascotas/default.jpg';
+      const formData = new FormData();
+      formData.append('foto', this.imagenFile);
 
-      const response = await this.http
-        .get<{ base64: string }>(`${environment.backendUrl}/imagen-firebase?path=${encodeURIComponent(imagePath)}`)
+      const res: any = await this.http
+        .post(`${environment.backendUrl.replace('/api','')}/upload`, formData)
         .toPromise();
 
-      return response?.base64 || null;
-    } catch (err) {
-      console.error('❌ Error cargando imagen desde backend por path:', err);
-      return null;
+      // ✅ Actualiza Firestore
+      await this.firestore.collection('mascotas').doc(this.mascota.mid).update({
+        imagenCarnet: res.url,
+        imagenPath: res.path
+      });
+
+      // ✅ Vuelve a obtener la mascota actualizada
+      const docSnap = await this.firestore
+        .collection('mascotas')
+        .doc(this.mascota.mid)
+        .get()
+        .toPromise();
+      const datosActualizados = docSnap?.data();
+
+      if (datosActualizados) {
+        this.mascota = { ...this.mascota, ...datosActualizados };
+        // ✅ Carga la nueva imagen como base64
+        const nuevaBase64 = await this.loadImageViaDOM();
+        this.mascota.imagenBase64 = nuevaBase64 || 'assets/mascotas/default.jpg';
+      }
+
+      this.imagenFile = null;
+      this.imagenPreview = null;
+
+      await loading.dismiss();
+      await Swal.fire({
+        icon: 'success',
+        title: '¡Foto actualizada!',
+        text: 'La foto fue subida y guardada correctamente.',
+        confirmButtonText: 'OK',
+        heightAuto: false
+      });
+    } catch (e) {
+      await loading.dismiss();
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error al subir foto',
+        text: 'Ocurrió un problema al subir la imagen.',
+        confirmButtonText: 'OK',
+        heightAuto: false
+      });
     }
   }
 
-  goBack() {
-  this.navCtrl.back();
-  }
+    goBack() {
+    this.navCtrl.back();
+    }
 
-}
+  }
 
 
 

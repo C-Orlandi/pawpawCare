@@ -15,48 +15,65 @@
 </ion-header>
 
 <ion-content class="ion-padding">
- <div id="carnetPDF">
-  <ion-card class="carnet-card">
-    <img [src]="mascota?.imagenBase64" alt="Foto de mascota" class="foto-carnet" />
+  <div id="carnetPDF">
+    <ion-card class="carnet-card">
+      
+      <div class="imagen-carnet-container">
+        <img 
+          [src]="imagenPreview || mascota?.imagenCarnet || 'assets/mascotas/default.jpg'"
+ 
+          alt="Foto de mascota" 
+          class="foto-carnet"
+          (click)="fileInput.click()" 
+        />
+        <input type="file" hidden #fileInput (change)="onFileSelected($event)" accept="image/*">
+        <ion-icon name="camera" class="icono-camara" (click)="fileInput.click()"></ion-icon>
+      </div>
 
-    <ion-card-header>
-      <ion-card-title>{{ mascota?.nombre }}</ion-card-title>
-      <ion-card-subtitle>{{ mascota?.tipo }} - {{ mascota?.raza }}</ion-card-subtitle>
-    </ion-card-header>
+      <ion-row class="ion-justify-content-center ion-margin-top" *ngIf="imagenPreview">
+        <ion-col size="12" class="ion-text-center">
+          <ion-button color="success" size="small" (click)="guardarNuevaFoto()">Guardar nueva foto</ion-button>
+          <ion-button color="medium" size="small" fill="clear" (click)="imagenPreview = null">Cancelar</ion-button>
+        </ion-col>
+      </ion-row>
 
-    <ion-card-content>
-      <ion-list lines="none">
-        <ion-item>
-          <ion-label><strong>Especie:</strong></ion-label>
-          <ion-text>{{ mascota?.tipo }}</ion-text>
-        </ion-item>
-        <ion-item>
-          <ion-label><strong>Raza:</strong></ion-label>
-          <ion-text>{{ mascota?.raza }}</ion-text>
-        </ion-item>
-        <ion-item>
-          <ion-label><strong>Sexo:</strong></ion-label>
-          <ion-text>{{ mascota?.sexo }}</ion-text>
-        </ion-item>
-        <ion-item>
-          <ion-label><strong>Color:</strong></ion-label>
-          <ion-text>{{ mascota?.color }}</ion-text>
-        </ion-item>
-        <ion-item>
-          <ion-label><strong>Nro. Chip:</strong></ion-label>
-          <ion-text>{{ mascota?.chip || 'No registrado' }}</ion-text>
-        </ion-item>
-        <ion-item>
-          <ion-label><strong>Contacto Dueño:</strong></ion-label>
-          <ion-text>{{ mascota?.dueno?.contacto || 'Sin contacto' }}</ion-text>
-        </ion-item>
-        <ion-item>
-          <ion-label><strong>Dueño:</strong></ion-label>
-          <ion-text>{{ mascota?.dueno?.nombre || 'No asignado' }}</ion-text>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-</div>
+      <ion-card-header>
+        <ion-card-title>{{ mascota?.nombre }}</ion-card-title>
+        <ion-card-subtitle>{{ mascota?.tipo }} - {{ mascota?.raza }}</ion-card-subtitle>
+      </ion-card-header>
 
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label><strong>Especie:</strong></ion-label>
+            <ion-text>{{ mascota?.tipo }}</ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Raza:</strong></ion-label>
+            <ion-text>{{ mascota?.raza }}</ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Sexo:</strong></ion-label>
+            <ion-text>{{ mascota?.sexo }}</ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Color:</strong></ion-label>
+            <ion-text>{{ mascota?.color }}</ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Nro. Chip:</strong></ion-label>
+            <ion-text>{{ mascota?.chip || 'No registrado' }}</ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Contacto Dueño:</strong></ion-label>
+            <ion-text>{{ mascota?.dueno?.contacto || 'Sin contacto' }}</ion-text>
+          </ion-item>
+          <ion-item>
+            <ion-label><strong>Dueño:</strong></ion-label>
+            <ion-text>{{ mascota?.dueno?.nombre || 'No asignado' }}</ion-text>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
