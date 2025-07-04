@@ -23,13 +23,13 @@
 
         <ng-container *ngIf="rec.tipo === 'vacuna' || rec.tipo === 'desparasitacion'">
           <p>Nombre: {{ rec.nombre }}</p>
-          <p>Fecha: {{ formatearFechaHora(rec.horaInicio) }}</p>
+          <p>Fecha: {{ formatearFechaHora(rec.fechayhora) }}</p>
           <p [class.text-red]="rec.estado === 'pendiente'">Estado: {{ rec.estado }}</p>
         </ng-container>
 
         <ng-container *ngIf="rec.tipo === 'medicamento'">
           <p>Medicamento: {{ rec.nombre }}</p>
-          <p>Fecha: {{ formatearFechaHora(rec.horaInicio) }}</p>
+          <p>Fecha: {{ formatearFechaHora(rec.fechayhora) }}</p>
           <p>Dosis: {{ rec.dosis }} x {{ rec.duracion }} días cada {{ rec.frecuenciaHoras }} horas</p>
           <p [class.text-red]="rec.estado === 'activo'">Estado: {{ rec.estado }}</p>
         </ng-container>

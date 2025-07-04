@@ -65,7 +65,7 @@ export class ExportarpdfService {
           await Swal.fire({
             icon: 'success',
             title: '¡Enviado!',
-            text: '📧 PDF enviado correctamente por correo.',
+            text: 'PDF enviado correctamente por correo.',
             confirmButtonText: 'OK',
             heightAuto: false
           });

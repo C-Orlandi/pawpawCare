@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import Swal from 'sweetalert2';
 import { AuthService } from 'src/app/services/auth.service';
-import { IonicModule, LoadingController } from '@ionic/angular';
+import { IonicModule, LoadingController, NavController } from '@ionic/angular';
 import { MenuController } from '@ionic/angular';
 
 @Component({
@@ -20,7 +20,8 @@ export class ResetpasswordPage implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private loadingCtrl: LoadingController,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private navCtrl: NavController
   ) {
     this.resetForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
@@ -76,5 +77,9 @@ export class ResetpasswordPage implements OnInit {
         heightAuto: false
       });
     }
+  }
+
+  goBack() {
+  this.navCtrl.back();
   }
 }

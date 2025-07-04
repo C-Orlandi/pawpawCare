@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { AlertController, IonicModule, LoadingController, MenuController } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController, MenuController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
@@ -24,7 +24,8 @@ export class RegisterPage implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private menuController: MenuController,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private navCtrl: NavController
   ) {
     this.registerForm = this.formBuilder.group({
       nombre: ['', [Validators.required]],
@@ -125,5 +126,9 @@ export class RegisterPage implements OnInit {
       confirmButtonText: 'OK',
       heightAuto: false
     });
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 }

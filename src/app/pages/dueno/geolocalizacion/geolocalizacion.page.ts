@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { Route, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-geolocalizacion',
@@ -110,7 +111,8 @@ export class GeolocalizacionPage implements OnInit {
     this.cargando = true;
     this.markers = [];
 
-    const url = 'http://localhost:3000/api/veterinarias';
+    
+    const url = `${environment.backendUrl}/veterinarias`;
     const location = `${this.userLat},${this.userLng}`;
     const radiusParam = '30000';
 

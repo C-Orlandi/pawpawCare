@@ -133,12 +133,19 @@ import { environment } from 'src/environments/environment';
         const mid = this.modoEdicion && this.midExistente ? this.midExistente : uuidv4();
 
         let urlImagen = this.imagenAnterior || '';
+        let pathImagen = ''; // ✅ agregar esta línea
+
         if (this.imagenFile) {
           const formData = new FormData();
           formData.append('foto', this.imagenFile);
-          const uploadResponse: any = await this.http.post(`${environment.backendUrl.replace('/api', '')}/upload`,formData).toPromise();
+          formData.append('mid', mid); // ✅ muy importante
+
+          const uploadResponse: any = await this.http
+            .post(`${environment.backendUrl.replace('/api', '')}/upload`, formData)
+            .toPromise();
 
           urlImagen = uploadResponse.url;
+          pathImagen = uploadResponse.path; // ✅ capturar path
         }
 
         // Obtener usuario actualizado desde Firestore
@@ -153,6 +160,7 @@ import { environment } from 'src/environments/environment';
           ...data,
           edad: edadCalculada,
           imagen: urlImagen,
+          imagenPath: pathImagen || '', 
           usuarioUid: this.usuarioLogin?.uid || 'desconocido',
           dueno: {
             nombre: duenoNombre,

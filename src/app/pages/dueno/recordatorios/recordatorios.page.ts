@@ -8,6 +8,7 @@ import { ModalRecordatorioComponent } from 'src/app/components/modal-recordatori
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-recordatorios',
@@ -153,7 +154,6 @@ export class RecordatoriosPage implements OnInit {
         heightAuto: false
       });
 
-      this.enviarCorreoEliminacion(recordatorio);
       this.cargarRecordatorios();
 
     } catch (error) {
@@ -191,27 +191,6 @@ export class RecordatoriosPage implements OnInit {
     const minutos = f.getMinutes().toString().padStart(2, '0');
 
     return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
-  }
-
-  private async enviarCorreoEliminacion(recordatorio: any) {
-    const payload = {
-      email: 'correo@usuario.com',
-      asunto: 'Recordatorio eliminado',
-      cuerpo: `
-        Se ha eliminado el siguiente recordatorio:
-        Tipo: ${recordatorio.tipo}
-        Mascota: ${recordatorio.nombreMascota || 'Desconocida'}
-        Fecha: ${this.formatearFechaHora(recordatorio.fecha)}
-        Estado: ${recordatorio.estado}
-        Detalles adicionales: ${JSON.stringify(recordatorio)}
-      `
-    };
-
-    try {
-      await this.http.post('https://tu-backend.com/api/enviar-correo', payload).toPromise();
-    } catch (error) {
-      console.error('Error enviando correo eliminación:', error);
-    }
   }
 
   goBack() {

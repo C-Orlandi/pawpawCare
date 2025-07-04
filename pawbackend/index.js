@@ -49,17 +49,20 @@ const upload = multer({ dest: 'uploads/' });
 // Ruta para subir imagen
 app.post('/upload', upload.single('foto'), async (req, res) => {
   const archivo = req.file;
-
-  console.log('📥 Intentando subir archivo:', archivo?.originalname);
+  const mid = req.body.mid; // 👈 Agrega esto para recibir el ID de la mascota
 
   if (!archivo) {
     console.warn('⚠️ No se recibió archivo');
     return res.status(400).send('No se subió ningún archivo.');
   }
 
+  if (!mid) {
+    console.warn('⚠️ No se recibió el ID de la mascota (mid)');
+    return res.status(400).send('Falta el ID de la mascota (mid).');
+  }
+
   if (!archivo.mimetype.startsWith('image/')) {
-    console.warn('❌ Tipo de archivo no válido:', archivo.mimetype);
-    fs.unlinkSync(archivo.path); // Borrar archivo inválido
+    fs.unlinkSync(archivo.path);
     return res.status(400).send('Solo se permiten archivos de imagen.');
   }
 
@@ -74,7 +77,7 @@ app.post('/upload', upload.single('foto'), async (req, res) => {
       },
     });
 
-    fs.unlinkSync(archivo.path); // Eliminar archivo local
+    fs.unlinkSync(archivo.path); // Eliminar archivo local temporal
 
     // Obtener URL firmada
     const file = bucket.file(destino);
@@ -83,10 +86,17 @@ app.post('/upload', upload.single('foto'), async (req, res) => {
       expires: '03-09-2030',
     });
 
-    console.log('✅ Imagen subida con éxito:', url);
-    res.status(200).json({ url });
+    // ✅ Actualizar Firestore
+    await admin.firestore().collection('mascotas').doc(mid).update({
+      imagen: url,
+      imagenPath: destino,
+    });
+
+    console.log('✅ Imagen subida y datos actualizados para mascota:', mid);
+    res.status(200).json({ url, path: destino });
+
   } catch (error) {
-    console.error('🔥 Error al subir archivo:', error);
+    console.error('🔥 Error al subir archivo o actualizar Firestore:', error);
     res.status(500).send('Error al subir el archivo.');
   }
 });

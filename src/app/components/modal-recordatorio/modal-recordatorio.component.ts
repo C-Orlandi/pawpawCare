@@ -50,11 +50,11 @@ export class ModalRecordatorioComponent implements OnInit {
         tipo: this.recordatorioEdit.tipo || '',
         mid: this.recordatorioEdit.mid || '',
         nombre: this.recordatorioEdit.nombre || '',
-        fechaHora: this.recordatorioEdit.fecha || ''
+        fechaHora: this.recordatorioEdit.fechayhora || ''
       });
 
       const tipo = this.recordatorioEdit.tipo;
-      const fechaGuardada = new Date(this.recordatorioEdit.fecha);
+      const fechaGuardada = new Date(this.recordatorioEdit.fechayhora);
       const ahora = new Date();
 
       if ((tipo === 'vacuna' || tipo === 'desparasitacion') && fechaGuardada <= ahora) {
@@ -112,7 +112,7 @@ export class ModalRecordatorioComponent implements OnInit {
           tipo: formData.tipo,
           mid: formData.mid,
           nombre: formData.nombre,
-          fecha: formData.fechaHora,
+          fechayhora: formData.fechaHora,
           estado: estado
         };
 
@@ -146,7 +146,7 @@ export class ModalRecordatorioComponent implements OnInit {
         mid,
         tipo: tipoSeleccionado,
         nombre,
-        fecha: fechaHora,
+        fechayhora: fechaHora,
         creadoEn
       };
 
@@ -156,7 +156,7 @@ export class ModalRecordatorioComponent implements OnInit {
 
       if (tipoSeleccionado === 'vacuna') {
         const vacunaRef = await this.afs.collection('vacunasMascotas').add({
-          uid: this.usuarioUid, mid, rid, nombre, fecha: fechaHora, estado: 'pendiente', creadoEn
+          uid: this.usuarioUid, mid, rid, nombre, fechayhora: fechaHora, estado: 'pendiente', creadoEn
         });
         const vid = vacunaRef.id;
         await this.afs.collection('vacunasMascotas').doc(vid).update({ vid });
@@ -170,14 +170,14 @@ export class ModalRecordatorioComponent implements OnInit {
           datos: {
             nombreMascota,
             nombreVacuna: nombre,
-            fecha: fechaHora,
+            fechayhora: fechaHora,
             estado: 'pendiente'
           }
         }).toPromise();
 
       } else if (tipoSeleccionado === 'desparasitacion') {
         const despRef = await this.afs.collection('desparasitacionesMascotas').add({
-          uid: this.usuarioUid, mid, rid, nombre, fecha: fechaHora, estado: 'pendiente', creadoEn
+          uid: this.usuarioUid, mid, rid, nombre, fechayhora: fechaHora, estado: 'pendiente', creadoEn
         });
         const id_desp = despRef.id;
         await this.afs.collection('desparasitacionesMascotas').doc(id_desp).update({ id_desp });
@@ -191,7 +191,7 @@ export class ModalRecordatorioComponent implements OnInit {
           datos: {
             nombreMascota,
             nombreDesparasitacion: nombre,
-            fecha: fechaHora,
+            fechayhora: fechaHora,
             estado: 'pendiente'
           }
         }).toPromise();
@@ -226,18 +226,18 @@ export class ModalRecordatorioComponent implements OnInit {
     await loading.present();
 
     try {
-      let { rid, tipo, fecha, estado, nombre, mid, ...otrosCampos } = recordatorioActualizado;
+      let { rid, tipo, fechayhora, estado, nombre, mid, ...otrosCampos } = recordatorioActualizado;
 
       if (!estado) {
         estado = this.determinarEstadoPorTipo(tipo);
       }
 
-      await this.afs.collection('recordatorios').doc(rid).update({ fecha, nombre, mid, ...otrosCampos });
+      await this.afs.collection('recordatorios').doc(rid).update({ fechayhora, nombre, mid, ...otrosCampos });
 
       if (tipo === 'vacuna') {
-        await this.actualizarEstadoPorRid('vacunasMascotas', rid, { fecha, estado, nombre, ...otrosCampos });
+        await this.actualizarEstadoPorRid('vacunasMascotas', rid, { fechayhora, estado, nombre, ...otrosCampos });
       } else if (tipo === 'desparasitacion') {
-        await this.actualizarEstadoPorRid('desparasitacionesMascotas', rid, { fecha, estado, nombre, ...otrosCampos });
+        await this.actualizarEstadoPorRid('desparasitacionesMascotas', rid, { fechayhora, estado, nombre, ...otrosCampos });
       }
 
       const usuario = localStorage.getItem('usuarioLogin');
@@ -251,7 +251,7 @@ export class ModalRecordatorioComponent implements OnInit {
         tipo,
         datos: {
           nombreMascota,
-          fecha,
+          fechayhora,
           estado,
         }
       };
