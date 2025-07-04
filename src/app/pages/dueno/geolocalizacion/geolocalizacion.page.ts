@@ -56,7 +56,8 @@ export class GeolocalizacionPage implements OnInit {
   try {
     // 🔐 Solo pedimos permisos en Android/iOS
     if (plataforma !== 'web') {
-      const permiso: PermissionStatus = await Geolocation.requestPermissions();
+      const permiso = await Geolocation.requestPermissions({ permissions: ['location'] });
+
       if (permiso.location !== 'granted') {
         await this.mostrarAlerta('Permiso requerido', 'Debes permitir la ubicación para usar esta función.');
         return;
