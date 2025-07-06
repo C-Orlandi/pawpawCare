@@ -15,13 +15,23 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
 
   let mensaje = '';
 
+  function formatearFecha(fechaStr) {
+    const fecha = new Date(fechaStr);
+    const dia = fecha.getDate().toString().padStart(2, '0');
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const anio = fecha.getFullYear();
+    const horas = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+    return `${dia}/${mes}/${anio} ${horas}:${minutos}`;
+  }
+
   if (tipo === 'vacuna') {
     asunto = `Nuevo recordatorio de vacuna registrado en PawCare`;
     mensaje = `
       <h3>🐾 Nueva vacuna registrada para tu mascota</h3>
       <p><strong>Mascota:</strong> ${datos.nombreMascota}</p>
       <p><strong>Vacuna:</strong> ${datos.nombreVacuna}</p>
-      <p><strong>Fecha:</strong> ${new Date(datos.fechayhora).toLocaleString()}</p>
+      <p><strong>Fecha:</strong> ${formatearFecha(datos.fechayhora)}</p>
       <p><strong>Estado:</strong> ${datos.estado}</p>
     `;
   } else if (tipo === 'desparasitacion') {
@@ -30,7 +40,7 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
       <h3>🦠 Nueva desparasitación registrada</h3>
       <p><strong>Mascota:</strong> ${datos.nombreMascota}</p>
       <p><strong>Tratamiento:</strong> ${datos.nombreDesparasitacion}</p>
-      <p><strong>Fecha:</strong> ${new Date(datos.fechayhora).toLocaleString()}</p>
+      <p><strong>Fecha:</strong> ${formatearFecha(datos.fechayhora)}</p>
       <p><strong>Estado:</strong> ${datos.estado}</p>
     `;
   } else {
