@@ -15,8 +15,7 @@ declare let navigator: any;
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  public appPages = [
-  ];
+  public appPages = [];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
   private previousClass = '';
@@ -40,9 +39,9 @@ export class AppComponent {
         const currentUrl = this.router.url;
 
         if (currentUrl === '/home') {
-          navigator['app'].exitApp(); 
+          navigator['app'].exitApp();
         } else {
-          this.location.back(); 
+          this.location.back();
         }
       });
     });
@@ -50,14 +49,6 @@ export class AppComponent {
 
   initTema() {
     this.temaService.colorToolbar$.subscribe(colorClass => {
-      if (this.previousClass) {
-        this.renderer.removeClass(document.body, this.previousClass);
-      }
-
-      if (colorClass) {
-        this.renderer.addClass(document.body, colorClass);
-        this.previousClass = colorClass;
-      }
     });
   }
 
@@ -67,21 +58,13 @@ export class AppComponent {
     this.afAuth.authState.subscribe(async user => {
       if (user) {
         const doc = await this.afs.collection('usuarios').doc(user.uid).get().toPromise();
-
-        if (doc && doc.exists) {
-          const data = doc.data() as { toolbarColor?: string };
-          if (data?.toolbarColor) {
-            this.temaService.setColor(data.toolbarColor);
-          } else {
-            this.temaService.setColor('toolbar-morado');
-          }
-        } else {
-          this.temaService.setColor('toolbar-morado');
-        }
+        const data = doc?.data() as { toolbarColor?: string };
+        this.temaService.setColor(data?.toolbarColor || 'toolbar-morado');
       } else {
-        this.temaService.setColor('toolbar-morado');
+        this.temaService.setColor('toolbar-morado'); 
       }
-      this.initTema();
     });
+
+    this.initTema(); 
   }
 }

@@ -21,21 +21,22 @@ export class PerfilMenuPage implements OnInit {
   constructor(private router: Router, private authService: AuthService, private navCtrl: NavController, private temaService: TemaService) {}
 
   ngOnInit() {
-  const usuario = localStorage.getItem('usuarioLogin');
-  const foto = localStorage.getItem('fotoPerfil');
-  const savedColor = localStorage.getItem('toolbarColor');
+    const usuario = localStorage.getItem('usuarioLogin');
+    const foto = localStorage.getItem('fotoPerfil');
+    const savedColor = localStorage.getItem('toolbarColor');
 
-  if (usuario) {
-    const usuarioParsed = JSON.parse(usuario);
-    this.usuarioLogin = usuarioParsed.nombre;
-  }
+    if (usuario) {
+      const usuarioParsed = JSON.parse(usuario);
+      this.usuarioLogin = usuarioParsed.nombre;
+    }
 
-  if (foto) {
-    this.fotoPerfil = foto;
+    if (foto) {
+      this.fotoPerfil = foto;
+    }
   }
-}
 
   logout() {
+    this.temaService.clearColor(); 
     this.authService.logout();
     this.router.navigate(['/login']);
   }

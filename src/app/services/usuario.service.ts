@@ -21,7 +21,6 @@ export class UsuariosService {
   ) {}
 
   getUsuarios(): Observable<Usuario[]> {
-    // compat usa collection().valueChanges()
     return this.firestore.collection<Usuario>(this.collectionName).valueChanges({ idField: 'uid' });
   }
 

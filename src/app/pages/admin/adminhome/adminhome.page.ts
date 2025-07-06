@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { NavController } from '@ionic/angular';
+import { TemaService } from 'src/app/services/tema.service';
 
 @Component({
   selector: 'app-adminhome',
@@ -12,7 +13,7 @@ export class AdminhomePage implements OnInit {
 
 usuarioLogin?: string;
 
-  constructor(private router: Router, private authService: AuthService, private navCtrl: NavController) {}
+  constructor(private router: Router, private authService: AuthService, private navCtrl: NavController, private temaService: TemaService) {}
 
   ngOnInit() {
     const usuario = localStorage.getItem('usuarioLogin');
@@ -23,7 +24,10 @@ usuarioLogin?: string;
   }
 
   logout() {
+    this.temaService.clearColor();
+    this.temaService.setColor('toolbar-morado'); 
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
 }
