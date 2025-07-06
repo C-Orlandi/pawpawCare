@@ -30,7 +30,7 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
       <h3>🦠 Nueva desparasitación registrada</h3>
       <p><strong>Mascota:</strong> ${datos.nombreMascota}</p>
       <p><strong>Tratamiento:</strong> ${datos.nombreDesparasitacion}</p>
-      <p><strong>Fecha:</strong> ${datos.fechayhora}</p>
+      <p><strong>Fecha:</strong> ${new Date(datos.fechayhora).toLocaleString()}</p>
       <p><strong>Estado:</strong> ${datos.estado}</p>
     `;
   } else {
