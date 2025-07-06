@@ -49,7 +49,11 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
     from: 'PawCare <pawcare.apppaw@gmail.com>',
     to: email,
     subject: `Recordatorio de ${tipo} registrado en PawCare`,
-    html: mensaje
+    html: `
+      <div>
+        <p>${mensaje}</p>
+      </div>
+    `
   };
 
   try {
