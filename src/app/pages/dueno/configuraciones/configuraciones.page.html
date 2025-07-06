@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar [ngClass]="toolbarColor">
     <ion-buttons slot="start">
       <ion-button fill="clear" (click)="goBack()">
         <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
@@ -10,6 +10,35 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <ion-item button (click)="togglePersonalizacion()" class="item-toggle" lines="none">
+    <ion-label>Personalización</ion-label>
+    <ion-icon slot="end" [name]="mostrarPersonalizacion ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+  </ion-item>
+
+  <div *ngIf="mostrarPersonalizacion" class="personalizacion-section ion-padding">
+    <ion-item lines="full">
+      <ion-label>Tema: </ion-label>
+      <ion-select
+        interface="popover"
+        [value]="toolbarColor"
+        (ionChange)="cambiarColor($event.detail.value)"
+        placeholder="Seleccione"
+      >
+        <ion-select-option value="" disabled>Seleccione</ion-select-option>
+        <ion-select-option value="toolbar-morado">Morado</ion-select-option>
+        <ion-select-option value="toolbar-azul">Azul</ion-select-option>
+        <ion-select-option value="toolbar-verde">Verde</ion-select-option>
+        <ion-select-option value="toolbar-rojo">Rojo</ion-select-option>
+        <ion-select-option value="toolbar-naranja">Naranja</ion-select-option>
+        <ion-select-option value="toolbar-amarillo">Amarillo</ion-select-option>
+        <ion-select-option value="toolbar-celeste">Celeste</ion-select-option>
+        <ion-select-option value="toolbar-gris">Gris</ion-select-option>
+        <ion-select-option value="toolbar-negro">Negro</ion-select-option>
+        <ion-select-option value="toolbar-blanco">Blanco</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
 
   <ion-item button (click)="toggleCambiarPassword()" class="item-toggle" lines="none">
     <ion-label>Cambiar Contraseña</ion-label>
@@ -38,5 +67,21 @@
       Cambiar Contraseña
     </ion-button>
   </form>
+
+  <!-- Eliminar cuenta -->
+  <ion-item button (click)="toggleEliminarCuenta()" class="item-toggle" lines="none">
+    <ion-label>Eliminar Cuenta</ion-label>
+    <ion-icon slot="end" [name]="mostrarEliminar ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+  </ion-item>
+
+  <div *ngIf="mostrarEliminar" class="eliminar-section ion-padding">
+    <ion-text color="danger">
+      Esta acción eliminará tu cuenta permanentemente.
+    </ion-text>
+
+    <ion-button expand="block" color="danger" (click)="eliminarCuenta()">
+      Confirmar Eliminación
+    </ion-button>
+  </div>
 
 </ion-content>

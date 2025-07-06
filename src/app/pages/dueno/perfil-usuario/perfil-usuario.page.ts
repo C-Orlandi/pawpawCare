@@ -22,6 +22,8 @@ export class PerfilUsuarioPage implements OnInit {
   email = '';
   contacto = '';
 
+  toolbarColor: string = ''; 
+
   constructor(
     private afAuth: AngularFireAuth,
     private usuarioService: UsuariosService,
@@ -92,43 +94,6 @@ export class PerfilUsuarioPage implements OnInit {
       });
       await alert.present();
     }
-  }
-
-  async eliminarCuenta() {
-    const alert = await this.alertCtrl.create({
-      header: 'Confirmar eliminación',
-      message: '¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.',
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Eliminar',
-          handler: async () => {
-            if (!this.usuarioAuth) return;
-
-            const loading = await this.loadingCtrl.create({ message: 'Eliminando cuenta...' });
-            await loading.present();
-
-            try {
-              await this.usuarioService.eliminarUsuarioPerfil(this.usuarioAuth.uid);
-              await loading.dismiss();
-
-              await this.afAuth.signOut();
-              this.router.navigate(['/login']);
-            } catch (error) {
-              await loading.dismiss();
-              const errAlert = await this.alertCtrl.create({
-                header: 'Error',
-                message: 'No se pudo eliminar la cuenta: ' + error,
-                buttons: ['OK']
-              });
-              await errAlert.present();
-            }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
   }
 
   async actualizarDatosEnMascotas(uid: string, nuevoNombre: string, nuevoContacto: string) {

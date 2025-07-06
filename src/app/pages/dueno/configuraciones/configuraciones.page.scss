@@ -13,3 +13,171 @@
   display: block;
   font-weight: 500;
 }
+
+.config-content {
+  --background: #f9f9fb;
+  font-family: 'Poppins', 'Helvetica Neue', sans-serif;
+
+  .item-toggle {
+    --background: #ffffff;
+    border-radius: 12px;
+    margin: 12px 0;
+    box-shadow: 0 1px 6px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      --background: #f0f0f5;
+    }
+
+    .toggle-label {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #333;
+    }
+
+    .toggle-icon {
+      font-size: 1.3rem;
+      color: #666;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .danger-toggle {
+    .toggle-label {
+      color: #d9534f;
+      font-weight: 700;
+    }
+    .toggle-icon {
+      color: #d9534f;
+    }
+
+    &:hover {
+      --background: #fceaea;
+    }
+  }
+
+  form.password-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 6px;
+    box-shadow: 0 1px 10px rgb(0 0 0 / 0.08);
+
+    .input-password {
+      margin-bottom: 14px;
+
+      ion-label {
+        font-weight: 500;
+        color: #444;
+      }
+
+      ion-input {
+        font-size: 1rem;
+        color: #222;
+      }
+    }
+
+    ion-text {
+      margin-left: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .btn-submit {
+      --border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      box-shadow: 0 3px 8px rgb(0 0 0 / 0.15);
+      transition: background-color 0.3s ease;
+
+      &:not(:disabled):hover {
+        background-color: #222 !important;
+        box-shadow: 0 5px 14px rgb(0 0 0 / 0.3);
+      }
+    }
+  }
+
+  .eliminar-section {
+    background: #fff0f0;
+    border-radius: 12px;
+    margin-top: 6px;
+    box-shadow: 0 1px 8px rgb(217 83 79 / 0.25);
+
+    .danger-text {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .btn-delete {
+      --border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      box-shadow: 0 3px 10px rgb(217 83 79 / 0.45);
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #a9302a !important;
+        box-shadow: 0 5px 16px rgb(217 83 79 / 0.7);
+      }
+    }
+  }
+
+  ion-card.card-custom {
+    margin-top: 32px;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgb(0 0 0 / 0.1);
+
+    ion-card-header {
+      background: #fafafa;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 16px;
+
+      ion-card-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: #222;
+      }
+      ion-card-subtitle {
+        font-weight: 500;
+        color: #666;
+      }
+    }
+
+    ion-card-content {
+      ion-item {
+        --background: transparent;
+        --border-radius: 8px;
+        --min-height: 50px;
+
+        ion-label {
+          font-weight: 600;
+          color: #333;
+        }
+
+        ion-select {
+          font-weight: 500;
+          color: #444;
+        }
+      }
+    }
+  }
+}
+
+.toolbar-config {
+  --background: var(--ion-color-primary, #6f42c1);
+  --ion-toolbar-background: var(--background);
+  --ion-toolbar-color: #fff;
+  box-shadow: 0 3px 15px rgb(111 66 193 / 0.4);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.03em;
+}
+
+

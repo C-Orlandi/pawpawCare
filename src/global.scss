@@ -49,6 +49,56 @@ ion-toolbar {
   min-height: 60px;
 }
 
+body.toolbar-morado ion-toolbar {
+  --background: linear-gradient(135deg, #8f49af83, #441ba3c4);
+  --color: #ffffff;
+}
+
+body.toolbar-azul ion-toolbar {
+  --background: linear-gradient(135deg, #3f87a6, #153259);
+  --color: #ffffff;
+}
+
+body.toolbar-verde ion-toolbar {
+  --background: linear-gradient(135deg, #43cea2, #185a9d);
+  --color: #ffffff;
+}
+
+body.toolbar-rojo ion-toolbar {
+  --background: linear-gradient(135deg, #ca4749de, #f99c23);
+  --color: #ffffff;
+}
+
+body.toolbar-naranja ion-toolbar {
+  --background: linear-gradient(135deg, hsl(29, 66%, 53%), #f9d423);
+  --color: #ffffff;
+}
+
+body.toolbar-amarillo ion-toolbar {
+  --background: linear-gradient(135deg, #f7e973ee, #f9d423);
+  --color: #ffffff;
+}
+
+body.toolbar-celeste ion-toolbar {
+  --background: linear-gradient(135deg, #97ccf8e1, #4a509c);
+  --color: #ffffff;
+}
+
+body.toolbar-gris ion-toolbar {
+  --background: linear-gradient(135deg, hsl(0, 2%, 56%), #313131dc);
+  --color: #ffffff;
+}
+
+body.toolbar-negro ion-toolbar {
+  --background: linear-gradient(135deg, #111111c9, #35342dda);
+  --color: #ffffff;
+}
+
+body.toolbar-blanco ion-toolbar {
+  --background: linear-gradient(135deg, #f8eaeae7, #aaa9a5dc);
+  --color: #ffffff;
+}
+
 .header-title {
   font-size: 1.3rem;
   font-weight: 600;
@@ -58,40 +108,35 @@ ion-toolbar {
   color: #fff;
 }
 
-/* Íconos del header */
 ion-toolbar ion-button ion-icon {
   font-size: 24px;
   color: #ffffff;
 }
 
-/* Aplica a todos los ion-content en la app */
 ion-content {
   display: flex;
   flex-direction: column;
-  align-items: center;        /* Centrar horizontal */
-  justify-content: flex-start; /* Para que no se centre verticalmente por defecto */
+  align-items: center; 
+  justify-content: flex-start; 
   padding: 20px;
 
-  /* Para que el contenido no quede pegado a los lados */
   width: 100%;
 }
 
-/* Limitar ancho máximo de los contenidos visibles, como ion-card o divs directos */
 ion-content > * {
   max-width: 400px;
-  width: 100%; /* Que ocupe todo el ancho posible hasta el max */
+  width: 100%; 
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Opcional: centrar verticalmente en pantallas grandes */
 @media (min-width: 768px) {
   ion-content {
-    justify-content: center; /* centra verticalmente */
+    justify-content: center; 
     padding: 40px 20px;
   }
 
   ion-content > * {
-    max-width: 600px; /* ← AUMENTADO para web (antes era 400px) */
+    max-width: 600px; 
   }
 }

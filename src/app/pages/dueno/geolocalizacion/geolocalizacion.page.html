@@ -42,7 +42,6 @@
   <ion-icon name="alert-circle-outline" class="mensaje-icono"></ion-icon>
   <p>No se encontraron veterinarias para el filtro seleccionado.</p>
 </div>
-</ion-card>
 
   <div *ngIf="!cargando && markers.length > 0" class="mensaje-encontrados">
     <ion-icon name="checkmark-circle-outline" class="mensaje-icono"></ion-icon>
@@ -50,6 +49,7 @@
       {{ markers.length }} resultado{{ markers.length > 1 ? 's' : '' }} encontrado{{ markers.length > 1 ? 's' : '' }}.
     </p>
   </div>
+</ion-card>
 
   <div *ngIf="!cargando" class="mapa-container fade-in">
     <google-map

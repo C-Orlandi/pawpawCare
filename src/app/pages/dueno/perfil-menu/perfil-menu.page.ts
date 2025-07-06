@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { IonicModule, NavController } from '@ionic/angular';
+import { TemaService } from 'src/app/services/tema.service';
 
 @Component({
   selector: 'app-perfil-menu',
@@ -15,23 +16,24 @@ export class PerfilMenuPage implements OnInit {
 
   usuarioLogin?: string;
   fotoPerfil?: string;
-  defaultAvatar: string = 'https://cdn-icons-png.flaticon.com/512/219/219983.png';
+  defaultAvatar: string = 'https://cdn-icons-png.flaticon.com/512/219/219983.png'; 
 
-  constructor(private router: Router, private authService: AuthService, private navCtrl: NavController) {}
+  constructor(private router: Router, private authService: AuthService, private navCtrl: NavController, private temaService: TemaService) {}
 
   ngOnInit() {
-    const usuario = localStorage.getItem('usuarioLogin');
-    const foto = localStorage.getItem('fotoPerfil');
+  const usuario = localStorage.getItem('usuarioLogin');
+  const foto = localStorage.getItem('fotoPerfil');
+  const savedColor = localStorage.getItem('toolbarColor');
 
-    if (usuario) {
-      const usuarioParsed = JSON.parse(usuario);
-      this.usuarioLogin = usuarioParsed.nombre;
-    }
-
-    if (foto) {
-      this.fotoPerfil = foto;
-    }
+  if (usuario) {
+    const usuarioParsed = JSON.parse(usuario);
+    this.usuarioLogin = usuarioParsed.nombre;
   }
+
+  if (foto) {
+    this.fotoPerfil = foto;
+  }
+}
 
   logout() {
     this.authService.logout();
