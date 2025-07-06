@@ -71,6 +71,11 @@ export class PerfilUsuarioPage implements OnInit {
       //actualizar mascotas
       await this.actualizarDatosEnMascotas(this.usuarioAuth.uid, this.nombre, this.contacto);
 
+      localStorage.setItem('usuarioLogin', JSON.stringify({
+  ...JSON.parse(localStorage.getItem('usuarioLogin') || '{}'),
+  nombre: this.nombre
+}));
+
       await loading.dismiss();
 
       const alert = await this.alertCtrl.create({
