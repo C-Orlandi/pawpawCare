@@ -123,7 +123,7 @@ export class GeolocalizacionPage implements OnInit {
     this.http.get<any>(url, {
       params: { location, query, radius: radiusParam }
     }).subscribe(async res => {
-      console.log(`✅ Resultados para ${this.tipoVeterinaria}:`, res.results);
+      console.log(`Resultados para ${this.tipoVeterinaria}:`, res.results);
 
       this.markers = res.results
         .slice(0, 100)
@@ -140,10 +140,10 @@ export class GeolocalizacionPage implements OnInit {
               : 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
           },
         }));
-      console.log('✅ Marcadores cargados:', this.markers);
+      console.log('Marcadores cargados:', this.markers);
       this.cargando = false;
     }, async (error) => {
-      console.error('❌ Error al buscar veterinarias:', error);
+      console.error('Error al buscar veterinarias:', error);
       this.cargando = false;
       const alert = await this.alertCtrl.create({
         header: 'Error',
@@ -156,7 +156,7 @@ export class GeolocalizacionPage implements OnInit {
 
 
   estaDentroDelRadio(lat: number, lng: number): boolean {
-    return true; // se desactiva el filtro por radio
+    return true;
   }
 
   deg2rad(deg: number): number {

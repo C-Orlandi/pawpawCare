@@ -1,10 +1,9 @@
-// noti.js
 const express = require('express');
 const nodemailer = require('nodemailer');
 const admin = require('firebase-admin');
 const router = express.Router();
 
-const frontendBaseUrl = 'https://pawcare.app'; // Cambiar a tu dominio real
+const frontendBaseUrl = 'https://pawcare.app'; 
 
 router.post('/enviar-email-recordatorio', async (req, res) => {
   const { email, tipo, datos, vid } = req.body;
@@ -59,15 +58,14 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Email enviado a ${email}`);
+    console.log(`Email enviado a ${email}`);
     res.status(200).send({ message: 'Email enviado' });
   } catch (error) {
-    console.error('❌ Error enviando email:', error);
+    console.error('Error enviando email:', error);
     res.status(500).send({ error: 'Error enviando email' });
   }
 });
 
-// Ruta de confirmación desde el email
 router.get('/confirmar-vacuna', async (req, res) => {
   const { vid, estado } = req.query;
   if (!vid || !estado) {
@@ -82,9 +80,9 @@ router.get('/confirmar-vacuna', async (req, res) => {
       ...(fechaAplicada && { fechaAplicada })
     });
 
-    res.send(`✅ Estado actualizado correctamente a '${estado}' para vacuna ${vid}`);
+    res.send(`Estado actualizado correctamente a '${estado}' para vacuna ${vid}`);
   } catch (error) {
-    console.error('❌ Error actualizando estado de vacuna:', error);
+    console.error('Error actualizando estado de vacuna:', error);
     res.status(500).send('Error al actualizar la vacuna');
   }
 });

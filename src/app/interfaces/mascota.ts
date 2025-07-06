@@ -4,12 +4,12 @@ export interface Mascota {
   nombre: string;
   tipo: string;
   raza: string;
-  sexo: string;           // Agregar esta línea
-  fechaNacimiento: string; // o Date, según uses
-  color: string;          // Agregar esta línea
-  chip: string;           // Agregar esta línea
-  peso: number | string;  // según tengas definido
-  categoria: string;      // Agregar esta línea
+  sexo: string;          
+  fechaNacimiento: string; 
+  color: string;          
+  chip: string;          
+  peso: number | string; 
+  categoria: string;      
   tieneVacunas?: boolean;
   dueno?: {
     nombre: string;

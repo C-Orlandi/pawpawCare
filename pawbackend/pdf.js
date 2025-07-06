@@ -1,3 +1,4 @@
+//pdf
 const express = require('express');
 const nodemailer = require('nodemailer');
 const router = express.Router();
@@ -13,7 +14,7 @@ router.post('/enviar-pdf', async (req, res) => {
     service: 'gmail',
     auth: {
       user: 'pawcare.apppaw@gmail.com',
-      pass: 'dkab ymkl wivh jmbz' // ✅ Asegúrate que esté actualizado
+      pass: 'dkab ymkl wivh jmbz'
     }
   });
 
@@ -33,10 +34,10 @@ router.post('/enviar-pdf', async (req, res) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ PDF enviado a ${email}`);
+    console.log(`PDF enviado a ${email}`);
     res.status(200).send({ message: 'Email con PDF enviado correctamente.' });
   } catch (error) {
-    console.error('❌ Error enviando PDF:', error);
+    console.error('Error enviando PDF:', error);
     res.status(500).send({ error: 'Error al enviar el PDF.' });
   }
 });

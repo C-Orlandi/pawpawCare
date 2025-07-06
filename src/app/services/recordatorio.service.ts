@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class RecordatorioService {
   constructor(private afs: AngularFirestore) {}
 
-  // Filtrar por UID
+  // Filtrar por uid
   getRecordatoriosPorUsuario(uid: string): Observable<any[]> {
     return this.afs.collection('recordatorios', ref =>
       ref.where('uid', '==', uid)

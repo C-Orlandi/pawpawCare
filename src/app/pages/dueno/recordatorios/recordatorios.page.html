@@ -15,6 +15,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+<ion-card>
   <ion-list *ngIf="recordatorios; else cargando">
     <ion-item *ngFor="let rec of recordatorios" lines="inset" button (click)="abrirModalRecordatorio(rec)">
       <ion-label>
@@ -50,4 +51,5 @@
     <ion-spinner name="crescent"></ion-spinner>
     <p class="ion-text-center">Cargando recordatorios...</p>
   </ng-template>
+  </ion-card>
 </ion-content>

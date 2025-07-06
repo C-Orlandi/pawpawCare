@@ -35,7 +35,6 @@ export class MisMascotasPage {
       return;
     }
 
-    // Escuchar cambios en localStorage mascotaSeleccionada para actualizar lista
     window.addEventListener('storage', (event) => {
       if (event.key === 'mascotaSeleccionada') {
         this.cargarMascotas();
@@ -44,7 +43,6 @@ export class MisMascotasPage {
 
     this.cargarMascotas();
 
-    // Query params para forzar recarga si se viene de edición
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['updated']) {
         this.cargarMascotas();
@@ -56,7 +54,7 @@ export class MisMascotasPage {
     const promesas = mascotas.map((mascota) => {
       return new Promise<any>((resolve) => {
         if (!mascota.imagen) {
-          return resolve(mascota); // No hay imagen, no se necesita esperar
+          return resolve(mascota); 
         }
 
         const img = new Image();
@@ -65,12 +63,12 @@ export class MisMascotasPage {
         img.onload = () => resolve(mascota);
         img.onerror = () => {
           console.warn('Error cargando imagen de mascota:', mascota.nombre);
-          resolve(mascota); // Sigue igual aunque falle
+          resolve(mascota); 
         };
       });
     });
 
-    return Promise.all(promesas); // Espera que todas las imágenes estén cargadas
+    return Promise.all(promesas); 
   }
 
   async cargarMascotas() {
@@ -83,9 +81,8 @@ export class MisMascotasPage {
 
     this.mascotaService.getMascotasPorUsuario(this.usuarioLogin.uid).subscribe({
       next: async (mascotas) => {
-        // Prepara pre-carga de imágenes
         const cargadas = await this.precargarImagenesYEsperar(mascotas);
-        this.mascotas = cargadas; // Solo las mostramos cuando TODAS están listas
+        this.mascotas = cargadas; 
       },
       error: (err) => {
         console.error('Error al cargar mascotas desde el servicio:', err);

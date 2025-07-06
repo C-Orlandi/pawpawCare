@@ -53,7 +53,6 @@
       });
     }
 
-    // Carga los usuarios como antes
     this.usuarios$ = this.firestore.collection('usuarios', ref => ref.where('tipo', '==', 'dueno')).valueChanges({ idField: 'uid' });
   }
 
@@ -106,7 +105,6 @@
         };
 
         if (this.mascota && this.mascota.mid) {
-          // Actualizar documento con compat
           await this.firestore.doc(`mascotas/${this.mascota.mid}`).update({ 
             usuarioUid: mascotaGuardada.usuarioUid,
             nombre: mascotaGuardada.nombre,
@@ -122,7 +120,6 @@
             tieneVacunas: this.mascotaForm.get('tieneVacunas')?.value || false
           });
         } else {
-          // Agregar nuevo documento con compat
           await this.firestore.collection('mascotas').add(mascotaGuardada);
         }
 

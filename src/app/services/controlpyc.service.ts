@@ -14,7 +14,6 @@ export class ControlpycService {
   }
 
   obtenerControles(mid: string): Observable<any[]> {
-    // Filtrar por mid y ordenar por fecha descendente
     return this.afs.collection('controlPesoCrecimiento', ref => 
       ref.where('mid', '==', mid).orderBy('fecha', 'desc')
     ).snapshotChanges().pipe(
@@ -28,7 +27,6 @@ export class ControlpycService {
 
   async agregarControl(data: any): Promise<void> {
     const docRef = await this.coleccion.add(data);
-    // Actualizar el campo cid con el id generado
     await this.coleccion.doc(docRef.id).update({ cid: docRef.id });
   }
 

@@ -27,25 +27,23 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- spinner -->
   <div *ngIf="cargando" class="spinner-center">
     <ion-spinner name="crescent" color="tertiary"></ion-spinner>
     <p class="spinner-texto">Buscando veterinarias cercanas...</p>
   </div>
-
+<ion-card>
   <!-- sin resultados -->
 <div *ngIf="!cargando && tipoVeterinaria === ''" class="mensaje-vacio">
   <ion-icon name="information-circle-outline" class="mensaje-icono"></ion-icon>
   <p>Selecciona un filtro para ver veterinarias cercanas.</p>
 </div>
 
-<!-- mensaje si no se encontraron resultados para el filtro -->
 <div *ngIf="!cargando && tipoVeterinaria !== '' && markers.length === 0" class="mensaje-vacio">
   <ion-icon name="alert-circle-outline" class="mensaje-icono"></ion-icon>
   <p>No se encontraron veterinarias para el filtro seleccionado.</p>
 </div>
+</ion-card>
 
-  <!-- resultados encontrados -->
   <div *ngIf="!cargando && markers.length > 0" class="mensaje-encontrados">
     <ion-icon name="checkmark-circle-outline" class="mensaje-icono"></ion-icon>
     <p>
@@ -53,7 +51,6 @@
     </p>
   </div>
 
-  <!-- mapa -->
   <div *ngIf="!cargando" class="mapa-container fade-in">
     <google-map
       height="400px"
@@ -62,14 +59,13 @@
       [zoom]="zoom"
       (mapReady)="crearOActualizarCirculo()"
       #map>
-      <!-- ubicación del usuario -->
+
       <map-marker
         [position]="userMarker.position"
         [title]="userMarker.title"
         [options]="userMarker.options">
       </map-marker>
 
-      <!-- marcadores -->
       <map-marker *ngFor="let marker of markers"
         [position]="marker.position"
         [title]="marker.title"

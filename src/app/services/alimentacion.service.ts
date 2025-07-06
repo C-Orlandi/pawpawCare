@@ -16,7 +16,6 @@ export class AlimentacionService {
     this.alimentacionCollection = this.afs.collection('alimentacionMascotas', ref =>
       ref.where('mid', '==', mid).orderBy('fecha', 'desc')
     );
-    // Traemos los documentos con su id en 'aid'
     return this.alimentacionCollection.snapshotChanges().pipe(
       map(actions => 
         actions.map(a => {

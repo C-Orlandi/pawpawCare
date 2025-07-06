@@ -23,9 +23,8 @@
     async ngOnInit() {
       const data = localStorage.getItem('mascotaSeleccionada');
     if (data) {
-      // ✅ Clonamos el objeto para que los cambios no afecten a localStorage
       const originalMascota = JSON.parse(data);
-      this.mascota = JSON.parse(JSON.stringify(originalMascota));  // clon profundo
+      this.mascota = JSON.parse(JSON.stringify(originalMascota));  
 
       if (this.mascota.imagenPath) {
         const base64 = await this.loadImageViaDOM();
@@ -52,43 +51,36 @@
         const ancho = doc.internal.pageSize.getWidth();
         const alto = doc.internal.pageSize.getHeight();
 
-        // 🟦 Configuración del carnet tipo tarjeta
         const margenHorizontal = 20;
         const carnetWidth = ancho - margenHorizontal * 2;
         const carnetHeight = 160;
         const xCarnet = margenHorizontal;
         const yCarnet = 40;
 
-        // Fondo pastel moderno
-        doc.setFillColor(245, 250, 255); // azul muy claro
+        doc.setFillColor(245, 250, 255); 
         doc.roundedRect(xCarnet, yCarnet, carnetWidth, carnetHeight, 6, 6, 'F');
 
-        // Borde gris claro
         doc.setDrawColor(220, 220, 220);
         doc.roundedRect(xCarnet, yCarnet, carnetWidth, carnetHeight, 6, 6);
 
-        // 🐾 Imagen circular centrada
         const imgBase64 = await this.loadImageViaDOM();
         if (imgBase64) {
           const imgSize = 55;
           const xImg = ancho / 2 - imgSize / 2;
           const yImg = yCarnet + 10;
 
-          // Círculo blanco de fondo (simulación de borde circular)
           doc.setFillColor(255, 255, 255);
           doc.circle(ancho / 2, yImg + imgSize / 2, imgSize / 2 + 2, 'F');
 
           doc.addImage(imgBase64, 'JPEG', xImg, yImg, imgSize, imgSize, undefined, 'FAST');
         }
 
-        // 🐶 Nombre destacado
         let yTexto = yCarnet + 75;
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(30, 30, 60);
         doc.text(this.mascota?.nombre || 'Nombre no disponible', ancho / 2, yTexto, { align: 'center' });
 
-        // 🐕 Especie - Raza
         yTexto += 9;
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
@@ -100,7 +92,6 @@
           { align: 'center' }
         );
 
-        // 🧾 Información detallada
         yTexto += 15;
         doc.setFontSize(11);
         doc.setTextColor(60, 60, 60);
@@ -118,12 +109,10 @@
           yTexto += 8;
         }
 
-        // 🌐 Branding inferior
         doc.setFontSize(10);
         doc.setTextColor(180, 180, 180);
         doc.text('PawCare - Gestión de Salud Animal', ancho / 2, yCarnet + carnetHeight - 10, { align: 'center' });
 
-        // 📤 Generar PDF y enviar por correo
         const pdfOutput = doc.output('datauristring');
         const base64Data = pdfOutput.split(',')[1];
         const nombreArchivo = `carnet_${this.mascota?.nombre || 'mascota'}.pdf`;
@@ -197,7 +186,7 @@
 
         return response?.base64 || null;
       } catch (err) {
-        console.error('❌ Error cargando imagen desde backend por path:', err);
+        console.error('Error cargando imagen desde backend por path:', err);
         return null;
       }
     }
@@ -235,13 +224,11 @@
         .post(`${environment.backendUrl.replace('/api','')}/upload`, formData)
         .toPromise();
 
-      // ✅ Actualiza Firestore
       await this.firestore.collection('mascotas').doc(this.mascota.mid).update({
         imagenCarnet: res.url,
         imagenPath: res.path
       });
 
-      // ✅ Vuelve a obtener la mascota actualizada
       const docSnap = await this.firestore
         .collection('mascotas')
         .doc(this.mascota.mid)
@@ -251,7 +238,7 @@
 
       if (datosActualizados) {
         this.mascota = { ...this.mascota, ...datosActualizados };
-        // ✅ Carga la nueva imagen como base64
+    
         const nuevaBase64 = await this.loadImageViaDOM();
         this.mascota.imagenBase64 = nuevaBase64 || 'assets/mascotas/default.jpg';
       }

@@ -18,6 +18,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+<ion-card>
   <ion-list *ngIf="controles$ | async as controles; else cargando">
     <ion-item
       *ngFor="let item of controles"
@@ -53,4 +54,5 @@
       <p class="ion-text-center">Cargando controles...</p>
     </div>
   </ng-template>
+</ion-card>
 </ion-content>

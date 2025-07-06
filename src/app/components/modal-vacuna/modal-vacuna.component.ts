@@ -123,7 +123,7 @@ export class ModalVacunaComponent implements OnInit {
     const dataElement = document.getElementById('historial-content'); // el div que contiene el historial
 
     if (!dataElement) {
-      console.error('❌ No se encontró el contenedor del historial');
+      console.error('No se encontró el contenedor del historial');
       return;
     }
 

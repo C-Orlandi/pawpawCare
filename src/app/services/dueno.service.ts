@@ -17,24 +17,21 @@ export class DuenoService {
     return this.afs.collection<Dueno>(this.collectionName).valueChanges({ idField: 'uid' });
   }
 
-  // Obtener dueños por un array de UIDs
   getDuenosPorUids(uids: string[]): Observable<Dueno[]> {
     return this.afs.collection<Dueno>(this.collectionName, ref =>
       ref.where('uid', 'in', uids)
     ).valueChanges({ idField: 'uid' });
   }
 
-  // Eliminar dueño por UID
+  // Eliminar dueño por uid
   eliminarDueno(uid: string): Promise<void> {
     return this.afs.collection(this.collectionName).doc(uid).delete();
   }
 
-  // Agregar o actualizar un dueño
   guardarDueno(dueno: Dueno): Promise<void> {
     return this.afs.collection(this.collectionName).doc(dueno.uid).set(dueno);
   }
 
-  // Obtener un dueño por UID
   getDuenoPorUid(uid: string): Observable<Dueno | undefined> {
     return this.afs.collection(this.collectionName).doc<Dueno>(uid).valueChanges();
   }

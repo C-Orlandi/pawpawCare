@@ -35,13 +35,12 @@
       });
 
       if (this.usuario) {
-    // Parchear el formulario con los datos existentes, excepto password por seguridad
         this.usuarioForm.patchValue({
           nombre: this.usuario.nombre || '',
           email: this.usuario.email || '',
           contacto: this.usuario.contacto || '',
           tipo: this.usuario.tipo || 'dueno',
-          pass: this.usuario.pass || '' // dejar vacío para que el usuario ponga uno nuevo si quiere
+          pass: this.usuario.pass || '' 
         });
       }
     }
@@ -69,7 +68,6 @@
 
       try {
         if (this.usuario) {
-          // Actualizar usuario existente
           const usuarioActualizado: Usuario = {
             uid: this.usuario.uid,
             ...formValue
@@ -138,7 +136,7 @@
       } catch (error: any) {
         await loading.dismiss();
 
-        console.error('❌ Error al guardar usuario:', error);
+        console.error('Error al guardar usuario:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',

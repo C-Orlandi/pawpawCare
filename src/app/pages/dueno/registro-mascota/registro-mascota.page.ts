@@ -139,7 +139,7 @@ import { environment } from 'src/environments/environment';
           const uploadResponse: any = await this.http.post(`${environment.backendUrl.replace('/api', '')}/upload`, formData).toPromise();
 
           urlImagen = uploadResponse.url;
-          imagenPath = uploadResponse.path; // <- GUARDA EL PATH DE FIREBASE
+          imagenPath = uploadResponse.path; 
         }
 
 

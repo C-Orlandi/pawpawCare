@@ -43,7 +43,6 @@ export class GestionarUsuarioPage implements OnInit {
 
     modal.onDidDismiss().then(result => {
       if (result.data) {
-        // Después de crear o actualizar, recargamos la lista
         this.cargarUsuarios();
       }
     });
@@ -63,10 +62,8 @@ export class GestionarUsuarioPage implements OnInit {
     await loading.present();
 
     try {
-      // 1. Elimina todas las mascotas del usuario
       await this.mascotaService.eliminarMascotasDeUsuario(uid);
 
-      // 2. Elimina el usuario
       await this.usuarioService.eliminarUsuario(uid);
 
       await loading.dismiss();

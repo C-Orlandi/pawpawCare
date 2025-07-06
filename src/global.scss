@@ -64,4 +64,34 @@ ion-toolbar ion-button ion-icon {
   color: #ffffff;
 }
 
+/* Aplica a todos los ion-content en la app */
+ion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;        /* Centrar horizontal */
+  justify-content: flex-start; /* Para que no se centre verticalmente por defecto */
+  padding: 20px;
 
+  /* Para que el contenido no quede pegado a los lados */
+  width: 100%;
+}
+
+/* Limitar ancho máximo de los contenidos visibles, como ion-card o divs directos */
+ion-content > * {
+  max-width: 400px;
+  width: 100%; /* Que ocupe todo el ancho posible hasta el max */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Opcional: centrar verticalmente en pantallas grandes */
+@media (min-width: 768px) {
+  ion-content {
+    justify-content: center; /* centra verticalmente */
+    padding: 40px 20px;
+  }
+
+  ion-content > * {
+    max-width: 600px; /* ← AUMENTADO para web (antes era 400px) */
+  }
+}

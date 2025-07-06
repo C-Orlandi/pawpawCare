@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
   templateUrl: './modal-desparasitacion.component.html'
 })
 export class ModalDesparasitacionComponent implements OnInit {
-  @Input() mid!: string; // Id de la mascota
+  @Input() mid!: string; 
   @Input() desparasitacion: any;
 
   desparasitacionForm!: FormGroup;

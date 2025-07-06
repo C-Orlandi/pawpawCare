@@ -103,7 +103,7 @@ export class ModalControlpycComponent implements OnInit {
 
       this.modalCtrl.dismiss(true);
     } catch (error) {
-      console.error('❌ Error al guardar el control:', error);
+      console.error('Error al guardar el control:', error);
       await loading.dismiss();
 
       Swal.fire({

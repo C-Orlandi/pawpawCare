@@ -129,7 +129,6 @@ export class ModalRecordatorioComponent implements OnInit {
         return;
       }
 
-      // Crear nuevo recordatorio
       const tipoSeleccionado = this.form.value.tipo;
       const mid = this.form.value.mid;
       const mascotaSeleccionada = this.mascotas.find(m => m.mid === mid);

@@ -42,7 +42,6 @@ export class HomeMascotaPage {
 
       this.mascota.imagen = nuevaUrl;
 
-      // Actualizar localStorage para que refleje cambio en home y mis-mascotas
       localStorage.setItem('mascotaSeleccionada', JSON.stringify(this.mascota));
 
     } catch (error) {

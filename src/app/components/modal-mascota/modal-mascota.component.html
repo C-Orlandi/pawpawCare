@@ -12,7 +12,6 @@
     <ion-card-content>
       <form [formGroup]="mascotaForm" (ngSubmit)="guardar()">
 
-        <!-- Dueño -->
         <ion-item lines="inset">
           <ion-label position="floating">Dueño <ion-text color="danger">*</ion-text></ion-label>
           <ion-select formControlName="usuarioUid" interface="popover">
@@ -25,7 +24,6 @@
           <small>Debe seleccionar un dueño.</small>
         </ion-text>
 
-        <!-- Nombre -->
         <ion-item lines="inset">
           <ion-label position="floating">Nombre <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="nombre"></ion-input>
@@ -42,7 +40,6 @@
           </ng-container>
         </ion-text>
 
-        <!-- Especie -->
         <ion-item lines="inset">
           <ion-label position="floating">Especie <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="tipo"></ion-input>
@@ -59,7 +56,6 @@
           </ng-container>
         </ion-text>
 
-        <!-- Raza -->
         <ion-item lines="inset">
           <ion-label position="floating">Raza <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="raza"></ion-input>
@@ -76,7 +72,6 @@
           </ng-container>
         </ion-text>
 
-        <!-- Sexo -->
         <ion-item lines="inset">
           <ion-label position="floating">Sexo <ion-text color="danger">*</ion-text></ion-label>
           <ion-select formControlName="sexo" placeholder="Seleccionar...">
@@ -88,7 +83,6 @@
           <small>Este campo es obligatorio.</small>
         </ion-text>
 
-        <!-- Fecha nacimiento -->
         <ion-item lines="inset">
           <ion-label position="floating">Fecha de Nacimiento <ion-text color="danger">*</ion-text></ion-label>
           <ion-datetime formControlName="fechaNacimiento" presentation="date" max="2025-12-31"></ion-datetime>
@@ -97,7 +91,6 @@
           <small>Este campo es obligatorio.</small>
         </ion-text>
 
-        <!-- Color -->
         <ion-item lines="inset">
           <ion-label position="floating">Color <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="color"></ion-input>
@@ -114,7 +107,6 @@
           </ng-container>
         </ion-text>
 
-        <!-- Chip -->
         <ion-item lines="inset">
           <ion-label position="floating">Número de chip / identificación <ion-text color="danger">*</ion-text></ion-label>
           <ion-input formControlName="chip"></ion-input>
@@ -128,7 +120,6 @@
           </ng-container>
         </ion-text>
 
-        <!-- Peso -->
         <ion-item lines="inset">
           <ion-label position="floating">Peso (kg) o (g)</ion-label>
           <ion-input formControlName="peso" type="number"></ion-input>
@@ -137,7 +128,6 @@
           <small>Este campo solo permite números.</small>
         </ion-text>
 
-        <!-- Categoría -->
         <ion-item lines="inset">
           <ion-label>Categoría <ion-text color="danger">*</ion-text></ion-label>
           <ion-select formControlName="categoria" (ionChange)="onCategoriaChange()" placeholder="Seleccionar...">
@@ -149,13 +139,11 @@
           <small>Este campo es obligatorio.</small>
         </ion-text>
 
-        <!-- Tiene vacunas (solo si exótico) -->
         <ion-item lines="inset" *ngIf="mascotaForm.get('categoria')?.value === 'exotico'">
           <ion-label>¿Esta especie tiene vacunas?</ion-label>
           <ion-checkbox formControlName="tieneVacunas" slot="start"></ion-checkbox>
         </ion-item>
 
-        <!-- Botón -->
         <ion-button expand="block" shape="round" size="large" class="ion-margin-top" type="submit" color="dark" [disabled]="mascotaForm.invalid" style="font-size: 15px;">
           {{ mascota ? 'Actualizar' : 'Crear' }} Mascota
         </ion-button>

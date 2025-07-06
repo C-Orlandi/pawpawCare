@@ -47,7 +47,7 @@ export class RecordatoriosPage implements OnInit {
       .valueChanges({ idField: 'rid' })
       .subscribe(async (data: any[]) => {
         const recordatoriosCompletos = await Promise.all(data.map(async (rec: any) => {
-          // Obtener nombre de mascota
+
           const mascotaSnap = await firstValueFrom(
             this.afs.collection('mascotas', ref =>
               ref.where('mid', '==', rec['mid'])
@@ -55,7 +55,6 @@ export class RecordatoriosPage implements OnInit {
           );
           rec['nombreMascota'] = (mascotaSnap.docs[0]?.data() as any)?.['nombre'] || 'Desconocida';
 
-          // Determinar colección según tipo
           const col = rec['tipo'] === 'medicamento'
             ? 'medicamentosMascotas'
             : rec['tipo'] === 'vacuna'
@@ -157,7 +156,7 @@ export class RecordatoriosPage implements OnInit {
       this.cargarRecordatorios();
 
     } catch (error) {
-      console.error('❌ Error al eliminar recordatorio:', error);
+      console.error('Error al eliminar recordatorio:', error);
       await loading.dismiss();
 
       await Swal.fire({

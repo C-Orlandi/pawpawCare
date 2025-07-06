@@ -75,6 +75,23 @@
   animation: fadeIn 0.4s ease-in-out forwards;
 }
 
+.reintentar-ubicacion {
+  text-align: center;
+  margin-top: 20px;
+  padding: 16px;
+
+  ion-icon {
+    font-size: 40px;
+    color: var(--ion-color-medium);
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 12px;
+    color: var(--ion-color-medium);
+  }
+}
+
 @keyframes fadeIn {
   to {
     opacity: 1;

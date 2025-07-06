@@ -2,7 +2,6 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-// Ruta para buscar veterinarias usando la API de Google
 router.get('/veterinarias', async (req, res) => {
   const { location, query } = req.query;
 
@@ -24,7 +23,6 @@ router.get('/veterinarias', async (req, res) => {
       pagetoken = data.next_page_token;
       attempts++;
 
-      // Esperar un poco si hay pagetoken
       if (pagetoken) await new Promise(resolve => setTimeout(resolve, 2000));
     } while (pagetoken && attempts < 3);
 
