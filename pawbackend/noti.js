@@ -21,7 +21,7 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
       <h3>🐾 Nueva vacuna registrada para tu mascota</h3>
       <p><strong>Mascota:</strong> ${datos.nombreMascota}</p>
       <p><strong>Vacuna:</strong> ${datos.nombreVacuna}</p>
-      <p><strong>Fecha:</strong> ${new Date(datos.fecha).toLocaleString()}</p>
+      <p><strong>Fecha:</strong> ${new Date(datos.fechayhora).toLocaleString()}</p>
       <p><strong>Estado:</strong> ${datos.estado}</p>
     `;
   } else if (tipo === 'desparasitacion') {
