@@ -38,8 +38,9 @@ import { environment } from 'src/environments/environment';
         sexo: ['', Validators.required],
         fechaNacimiento: ['', Validators.required],
         color: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/)]],
-        chip: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-        peso: ['', Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)], // opcional, acepta decimales
+        chip: ['', [Validators.pattern(/^[0-9]+$/)]],
+        peso: ['', Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)], 
+        unidad: ['g'],
         categoria: ['', Validators.required],
         tieneVacunas: [false]
       });

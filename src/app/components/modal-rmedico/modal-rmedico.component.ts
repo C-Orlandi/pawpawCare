@@ -24,11 +24,11 @@ export class ModalRmedicoComponent implements OnInit {
   ) {
     this.registroForm = this.fb.group({
       fechaVisita: [this.hoy, Validators.required],
-      motivo: ['', [Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]*$')]],
-      veterinario: ['', [Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]*$')]],
-      diagnostico: ['', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]*$')]],
-      tratamiento: ['', [Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ0-9 ,.()\\n\\r-]*$')]],
-      medicamentos: ['', [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ0-9 ,.()\\n\\r-]*$')]],
+      motivo: ['',[Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ \\-]*$')]],
+      veterinario: ['',[Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]*$')]],
+      diagnostico: ['',[Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ ]*$')]],
+      tratamiento: ['',[Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ0-9 ,.()\\n\\r\\-]*$')]],
+      medicamentos: ['',[Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-ZÁÉÍÓÚáéíóúñÑ0-9 ,.()\\n\\r\\-]*$')]]
     });
   }
 

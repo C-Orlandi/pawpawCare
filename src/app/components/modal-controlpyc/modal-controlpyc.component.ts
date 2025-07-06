@@ -1,32 +1,34 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController, LoadingController } from '@ionic/angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { firstValueFrom, Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular/standalone';
 import { ControlpycService } from 'src/app/services/controlpyc.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-controlpyc',
   templateUrl: './modal-controlpyc.component.html',
   styleUrls: ['./modal-controlpyc.component.scss']
 })
-export class ModalControlpycComponent implements OnInit {
-  @Input() control?: any;
-  usuarios$!: Observable<any[]>;
+export class ModalControlpycComponent  implements OnInit {
+
+  @Input() control: any;
+  @Input() mid!: string;
   formulario!: FormGroup;
+  esEdicion = false;
 
   constructor(
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private fb: FormBuilder,
-    private firestore: AngularFirestore,
     private controlService: ControlpycService,
-    private loadingCtrl: LoadingController
+    private loadingController: LoadingController
   ) {}
 
   ngOnInit() {
+    this.esEdicion = !!this.control;
+
     this.formulario = this.fb.group({
-      usuarioUid: [this.control?.usuarioUid || '', Validators.required],
       fecha: [this.control?.fecha || new Date().toISOString(), Validators.required],
       peso: [this.control?.peso || '', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
       unidad: [this.control?.unidad || '', Validators.required],
@@ -34,8 +36,6 @@ export class ModalControlpycComponent implements OnInit {
       actividadFisica: [this.control?.actividadFisica || '', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/), Validators.minLength(3)]],
       observaciones: [this.control?.observaciones || '', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/), Validators.minLength(3)]]
     });
-
-    this.usuarios$ = this.firestore.collection('usuarios').valueChanges({ idField: 'uid' });
   }
 
   async guardar() {
@@ -50,60 +50,39 @@ export class ModalControlpycComponent implements OnInit {
       return;
     }
 
-    const loading = await this.loadingCtrl.create({
-      message: this.control ? 'Actualizando registro...' : 'Guardando registro...',
-      spinner: 'crescent',
-      backdropDismiss: false
+    const loading = await this.loadingController.create({
+      message: 'Cargando...',
+      spinner: 'circles'
     });
+
     await loading.present();
 
-    const formValue = this.formulario.value;
-    const uid = formValue.usuarioUid;
+    const data = {
+      ...this.formulario.value,
+      mid: this.mid
+    };
 
     try {
-      const usuarios = await firstValueFrom(this.usuarios$);
-      const usuarioSeleccionado = usuarios.find(u => u.uid === uid);
-
-      if (!usuarioSeleccionado) {
-        await loading.dismiss();
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Usuario no encontrado. Selecciona un dueño válido.',
-          confirmButtonText: 'OK',
-          heightAuto: false
-        });
-        return;
-      }
-
-      const controlGuardado = {
-        ...formValue,
-        mid: this.control?.mid || this.generarMID(),
-        dueno: {
-          nombre: usuarioSeleccionado.nombre || '',
-          contacto: usuarioSeleccionado.contacto || ''
-        }
-      };
-
-      if (this.control && this.control.cid) {
-        await this.controlService.actualizarControl(this.control.cid, controlGuardado);
+      if (this.esEdicion) {
+        await this.controlService.actualizarControl(this.control.cid, data);
       } else {
-        await this.controlService.agregarControl(controlGuardado);
+        await this.controlService.agregarControl(data);
       }
 
       await loading.dismiss();
 
-      await Swal.fire({
+      Swal.fire({
         icon: 'success',
-        title: this.control ? 'Registro Actualizado' : 'Registro Exitoso',
-        text: this.control ? 'El registro fue actualizado correctamente.' : 'El registro fue guardado correctamente.',
+        title: this.esEdicion ? 'Registro Actualizado' : 'Registro Exitoso',
+        text: this.esEdicion ? 'El registro fue actualizado correctamente.' : 'El registro fue guardado correctamente.',
         confirmButtonText: 'OK',
         heightAuto: false
+      }).then(() => {
+        this.modalController.dismiss(true);
       });
 
-      this.modalCtrl.dismiss(true);
     } catch (error) {
-      console.error('Error al guardar el control:', error);
+      console.error('❌ Error al guardar el control:', error);
       await loading.dismiss();
 
       Swal.fire({
@@ -117,10 +96,6 @@ export class ModalControlpycComponent implements OnInit {
   }
 
   cerrar() {
-    this.modalCtrl.dismiss(false);
-  }
-
-  generarMID() {
-    return Math.random().toString(36).substring(2, 10);
+    this.modalController.dismiss(false);
   }
 }

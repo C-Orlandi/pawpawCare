@@ -29,7 +29,7 @@ export class ModalVacunaComponent implements OnInit {
 
   ngOnInit() {
     this.vacunaForm = this.fb.group({
-      nombre: ['', [
+      nombre: [this.vacuna?.nombre || '', [
         Validators.required,
         Validators.minLength(3),
         Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')

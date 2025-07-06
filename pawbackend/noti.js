@@ -30,7 +30,7 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
       <h3>🦠 Nueva desparasitación registrada</h3>
       <p><strong>Mascota:</strong> ${datos.nombreMascota}</p>
       <p><strong>Tratamiento:</strong> ${datos.nombreDesparasitacion}</p>
-      <p><strong>Fecha:</strong> ${new Date(datos.fecha).toLocaleString()}</p>
+      <p><strong>Fecha:</strong> ${new Date(datos.fechayhora).toLocaleString('es-CL', { dateStyle: 'short', timeStyle: 'short' })}</p>
       <p><strong>Estado:</strong> ${datos.estado}</p>
     `;
   } else {
@@ -49,11 +49,7 @@ router.post('/enviar-email-recordatorio', async (req, res) => {
     from: 'PawCare <pawcare.apppaw@gmail.com>',
     to: email,
     subject: `Recordatorio de ${tipo} registrado en PawCare`,
-    html: `
-      <div>
-        <p>${mensaje}</p>
-      </div>
-    `
+    html: mensaje
   };
 
   try {

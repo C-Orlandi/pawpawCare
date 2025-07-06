@@ -122,6 +122,13 @@
           <small>Este camopo es obligatorio y solo permite numeros</small>
         </ion-text>
       
+        <ion-item lines="inset">
+      <ion-label position="floating">Unidad de peso</ion-label>
+      <ion-select formControlName="unidad" interface="popover">
+        <ion-select-option value="g">g</ion-select-option>
+        <ion-select-option value="kg">kg</ion-select-option>
+      </ion-select>
+    </ion-item>
 
         <ion-item lines="inset">
           <ion-label>Categoría <ion-text color="danger">*</ion-text></ion-label>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+  import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import { Capacitor } from '@capacitor/core';
 import { HttpClient } from '@angular/common/http';
@@ -214,7 +214,7 @@ export class ExportarpdfService {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
-        doc.text(`Peso: ${c.peso ?? 'N/A'} ${this.capitalize(c.unidad) || 'kg'}`, 15, y + 8);
+        doc.text(`Peso: ${c.peso ?? 'N/A'} ${this.capitalize(c.unidad)}`, 15, y + 8);
         doc.text(`Condición corporal: ${this.capitalize(c.condicionCorporal) || 'N/A'}`, 15, y + 15);
         doc.text(`Actividad física: ${this.capitalize(c.actividadFisica) || 'N/A'}`, 15, y + 22);
         doc.text(`Observaciones: ${this.capitalize(c.observaciones) || 'Ninguna'}`, 15, y + 29);

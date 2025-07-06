@@ -26,7 +26,7 @@
         </ion-item>
         <ion-text color="danger" *ngIf="registroForm.get('motivo')?.touched">
           <p class="ion-padding-start" *ngIf="registroForm.get('motivo')?.hasError('minlength')">Debe tener al menos 3 letras.</p>
-          <p class="ion-padding-start" *ngIf="registroForm.get('motivo')?.hasError('pattern')">Solo letras y espacios.</p>
+          <p class="ion-padding-start" *ngIf="registroForm.get('motivo')?.hasError('pattern')">Solo letras, espacios y guiones.</p>
         </ion-text>
 
         <ion-item lines="inset">

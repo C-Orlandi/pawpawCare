@@ -56,13 +56,17 @@
             <ion-text>{{ mascota?.sexo }}</ion-text>
           </ion-item>
           <ion-item>
+            <ion-label><strong>Peso:</strong></ion-label>
+            <ion-text>{{ mascota?.peso }}{{ mascota?.unidad }}</ion-text>
+          </ion-item>
+          <ion-item>
             <ion-label><strong>Color:</strong></ion-label>
             <ion-text>{{ mascota?.color }}</ion-text>
           </ion-item>
-          <ion-item>
-            <ion-label><strong>Nro. Chip:</strong></ion-label>
-            <ion-text>{{ mascota?.chip || 'No registrado' }}</ion-text>
-          </ion-item>
+          <ion-item *ngIf="mascota?.chip">
+        <ion-label><strong>Nro. Chip:</strong></ion-label>
+        <ion-text>{{ mascota.chip }}</ion-text>
+      </ion-item>
           <ion-item>
             <ion-label><strong>Contacto Dueño:</strong></ion-label>
             <ion-text>{{ mascota?.dueno?.contacto || 'Sin contacto' }}</ion-text>
